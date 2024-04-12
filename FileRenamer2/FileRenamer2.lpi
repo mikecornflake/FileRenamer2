@@ -26,7 +26,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="2"/>
-      <BuildNr Value="177"/>
+      <BuildNr Value="178"/>
       <Language Value="0809"/>
       <Attributes pvaDebug="True"/>
       <StringTable CompanyName="Inspector Mike Pty Ltd" FileDescription="File Renamer and Metadata processor" LegalCopyright="(c) 2022" ProductName="FileRenamer2"/>
@@ -115,7 +115,7 @@
         <IsPartOfProject Value="True"/>
       </Unit9>
       <Unit10>
-        <Filename Value="..\..\..\fpc\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Filename Value="B:\fpc\packages\fcl-db\src\base\bufdataset_parser.pp"/>
         <IsPartOfProject Value="True"/>
       </Unit10>
       <Unit11>

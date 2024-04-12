@@ -279,7 +279,7 @@ End;
 
 Procedure TfrmRenamer.btnThumbnailerClick(Sender: TObject);
 Var
-  sPath, sVideoFilename, sThumbnail, sTemp: String;
+  sPath, sVideoFilename, sThumbnail, sPoster, sTemp: String;
   oBookmark: TBookMark;
 Begin
   InitializeFFmpeg;
@@ -302,8 +302,9 @@ Begin
           sPath := IncludeSlash(FDataset['Path']);
           sVideoFilename := sPath + FDataset['Filename'] + FDataset['FileExt'];
           sThumbnail := sPath + FDataset['Filename'] + '-thumb.jpg';
+          sPoster := sPath + FDataset['Filename'] + '-poster.jpg';
 
-          If Not FileExists(sThumbnail) Then
+          If (Not FileExists(sThumbnail)) And (Not FileExists(sPoster)) Then
           Begin
             SetStatus(sThumbnail);
 
@@ -320,6 +321,12 @@ Begin
 
         FDataset.Next;
         pbMain.Position := pbMain.Position + 1;
+
+        // TODO: you're FIRED!
+        If (pbMain.Position mod 100) = 0 Then
+        Begin
+          Application.ProcessMessages;
+        End;
       End;
     Finally
       If FDataset.BookmarkValid(oBookmark) Then
