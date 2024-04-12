@@ -1,0 +1,73 @@
+object dlgRenameOptions: TdlgRenameOptions
+  Left = 441
+  Height = 91
+  Top = 212
+  Width = 458
+  BorderIcons = []
+  BorderStyle = bsDialog
+  Caption = 'dlgRenameOptions'
+  ClientHeight = 91
+  ClientWidth = 458
+  OnCreate = FormCreate
+  LCLVersion = '2.3.0.0'
+  object Label1: TLabel
+    Left = 16
+    Height = 15
+    Top = 9
+    Width = 179
+    Caption = 'What would you like to rename?'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object btnFileOnly: TButton
+    Left = 72
+    Height = 25
+    Top = 56
+    Width = 80
+    AutoSize = True
+    Caption = 'Files only?'
+    Default = True
+    OnClick = btnOptionsClick
+    TabOrder = 0
+  end
+  object Button2: TButton
+    Tag = 1
+    Left = 160
+    Height = 25
+    Top = 56
+    Width = 95
+    AutoSize = True
+    Caption = 'Folders only?'
+    OnClick = btnOptionsClick
+    TabOrder = 1
+  end
+  object Button3: TButton
+    Tag = 2
+    Left = 264
+    Height = 25
+    Top = 56
+    Width = 111
+    AutoSize = True
+    Caption = 'Files and folders'
+    OnClick = btnOptionsClick
+    TabOrder = 2
+  end
+  object btnCancel: TButton
+    Tag = 3
+    Left = 384
+    Height = 25
+    Top = 56
+    Width = 62
+    AutoSize = True
+    Caption = 'Cancel'
+    OnClick = btnOptionsClick
+    TabOrder = 3
+  end
+  object Label2: TLabel
+    Left = 32
+    Height = 15
+    Top = 32
+    Width = 386
+    Caption = 'If you choose folders, all sub folders of the loaded folder will be renamed.'
+  end
+end
