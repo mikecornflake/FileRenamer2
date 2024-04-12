@@ -14,3 +14,8 @@ Metatags supported by the first version:
 + ID3
 + Windows Media Metadata
 + NTFS Storages
+
+# Current status
+Renaming and metadata saving is not implemented.  But this has been used as a framework for video processing.  I got ffprobe implemented to read video meta data, then was presented with a project requiring video processing based on existing metadata.  Most of the code had alrady been implemented in FileRenamer2, so I used this project for that...
+
+This is my first multi-threaded project.  I keep hacking in additional processing in the main thread, then am slowly work back through them migrating them to worker threads...
