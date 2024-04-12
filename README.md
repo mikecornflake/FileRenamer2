@@ -1,4 +1,4 @@
-"# FileRenamer2" 
+# FileRenamer2
 
 This was/is intended to be a filenamer tool, offering:
 + Search / Replace
