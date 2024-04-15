@@ -1,7 +1,7 @@
 inherited frmRenamer: TfrmRenamer
-  Left = 344
+  Left = 667
   Height = 653
-  Top = 107
+  Top = 108
   Width = 1123
   Caption = 'frmRenamer'
   ClientHeight = 653

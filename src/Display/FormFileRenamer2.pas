@@ -282,6 +282,7 @@ Var
   sPath, sVideoFilename, sThumbnail, sPoster, sTemp: String;
   oBookmark: TBookMark;
 Begin
+  // TODO put all this in a thread...
   InitializeFFmpeg;
 
   If FFmpegAvailable Then

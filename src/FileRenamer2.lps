@@ -8,13 +8,14 @@
         <Item1 ID="990724149927" Modes="Default" Value="-gw2"/>
       </SessionMatrixOptions>
     </BuildModes>
-    <Units Count="204">
+    <Units Count="209">
       <Unit0>
         <Filename Value="FileRenamer2.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="76" Y="13"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="13" Y="5"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="Classes\StringScriptor.pas"/>
@@ -30,12 +31,11 @@
         <ComponentName Value="frmRenamer"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="316"/>
-        <CursorPos X="22" Y="325"/>
+        <TopLine Value="877"/>
+        <CursorPos X="13" Y="589"/>
         <UsageCount Value="200"/>
         <Bookmarks Count="1">
-          <Item0 Y="343" ID="1"/>
+          <Item0 Y="344" ID="1"/>
         </Bookmarks>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -43,17 +43,18 @@
       <Unit3>
         <Filename Value="Classes\Tags.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="445"/>
-        <CursorPos X="5" Y="81"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="479"/>
+        <CursorPos Y="495"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit3>
       <Unit4>
         <Filename Value="Classes\TagMultimedia.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="73"/>
-        <CursorPos X="35" Y="103"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="74"/>
+        <CursorPos X="33" Y="77"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit4>
@@ -70,7 +71,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="43" Y="8"/>
-        <UsageCount Value="194"/>
+        <UsageCount Value="197"/>
       </Unit6>
       <Unit7>
         <Filename Value="Display\DialogScanFolder.pas"/>
@@ -81,7 +82,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="96"/>
         <CursorPos X="15" Y="104"/>
-        <UsageCount Value="187"/>
+        <UsageCount Value="190"/>
       </Unit7>
       <Unit8>
         <Filename Value="Classes\ThreadFolderParser.pas"/>
@@ -89,7 +90,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="248"/>
         <CursorPos X="28" Y="257"/>
-        <UsageCount Value="170"/>
+        <UsageCount Value="173"/>
         <Bookmarks Count="2">
           <Item0 Y="365" ID="3"/>
           <Item1 X="4" Y="153" ID="1"/>
@@ -101,17 +102,9 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="46"/>
         <CursorPos X="23" Y="73"/>
-        <UsageCount Value="163"/>
+        <UsageCount Value="166"/>
       </Unit9>
       <Unit10>
-        <Filename Value="B:\fpc\packages\fcl-db\src\base\bufdataset_parser.pp"/>
-        <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="424"/>
-        <CursorPos Y="438"/>
-        <UsageCount Value="108"/>
-      </Unit10>
-      <Unit11>
         <Filename Value="Display\DialogConvertVideo.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgConvertVideo"/>
@@ -120,9 +113,9 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="285"/>
         <CursorPos X="22" Y="296"/>
-        <UsageCount Value="63"/>
-      </Unit11>
-      <Unit12>
+        <UsageCount Value="66"/>
+      </Unit10>
+      <Unit11>
         <Filename Value="Display\DialogRenameOptions.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgRenameOptions"/>
@@ -130,7 +123,14 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="3" Y="17"/>
-        <UsageCount Value="31"/>
+        <UsageCount Value="34"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="B:\fpc\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="424"/>
+        <CursorPos Y="438"/>
+        <UsageCount Value="108"/>
       </Unit12>
       <Unit13>
         <Filename Value="Classes\ThreadFileParser.pas"/>
@@ -1490,98 +1490,183 @@
       </Unit201>
       <Unit202>
         <Filename Value="..\InspectorMike-common\Support\ffmpegSupport.pas"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="126"/>
         <CursorPos X="28" Y="130"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit202>
       <Unit203>
         <Filename Value="..\InspectorMike-common\Support\FileSupport.pas"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="40"/>
         <CursorPos X="28" Y="53"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit203>
+      <Unit204>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="113"/>
+        <CursorPos X="41" Y="129"/>
+        <UsageCount Value="22"/>
+        <Loaded Value="True"/>
+      </Unit204>
+      <Unit205>
+        <Filename Value="B:\Apps\Dev\lazarus_trunk\fpcsrc\packages\fcl-db\src\base\db.pas"/>
+        <UnitName Value="DB"/>
+        <EditorIndex Value="8"/>
+        <TopLine Value="93"/>
+        <CursorPos X="61" Y="107"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit205>
+      <Unit206>
+        <Filename Value="B:\Apps\Dev\lazarus_trunk\fpcsrc\rtl\objpas\sysutils\datih.inc"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="105"/>
+        <CursorPos X="10" Y="119"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit206>
+      <Unit207>
+        <Filename Value="B:\Apps\Dev\lazarus_trunk\fpcsrc\rtl\objpas\sysutils\dati.inc"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="1441"/>
+        <CursorPos X="3" Y="1443"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit207>
+      <Unit208>
+        <Filename Value="B:\Apps\Dev\lazarus_trunk\fpcsrc\rtl\inc\mathh.inc"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="97"/>
+        <CursorPos X="14" Y="111"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit208>
     </Units>
-    <JumpHistory Count="19" HistoryIndex="18">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="Display\FormFileRenamer2.pas"/>
-        <Caret Line="285" TopLine="279"/>
+        <Caret Line="294" TopLine="279"/>
       </Position1>
       <Position2>
         <Filename Value="Display\FormFileRenamer2.pas"/>
-        <Caret Line="287" TopLine="279"/>
+        <Caret Line="295" TopLine="279"/>
       </Position2>
       <Position3>
         <Filename Value="Display\FormFileRenamer2.pas"/>
-        <Caret Line="289" TopLine="279"/>
+        <Caret Line="296" TopLine="279"/>
       </Position3>
       <Position4>
         <Filename Value="Display\FormFileRenamer2.pas"/>
-        <Caret Line="290" TopLine="279"/>
+        <Caret Line="297" TopLine="279"/>
       </Position4>
       <Position5>
         <Filename Value="Display\FormFileRenamer2.pas"/>
-        <Caret Line="291" TopLine="279"/>
+        <Caret Line="298" TopLine="279"/>
       </Position5>
       <Position6>
         <Filename Value="Display\FormFileRenamer2.pas"/>
-        <Caret Line="292" TopLine="279"/>
+        <Caret Line="300" TopLine="279"/>
       </Position6>
       <Position7>
         <Filename Value="Display\FormFileRenamer2.pas"/>
-        <Caret Line="294" TopLine="279"/>
+        <Caret Line="285" TopLine="279"/>
       </Position7>
       <Position8>
         <Filename Value="Display\FormFileRenamer2.pas"/>
-        <Caret Line="295" TopLine="279"/>
+        <Caret Line="153" Column="36" TopLine="140"/>
       </Position8>
       <Position9>
         <Filename Value="Display\FormFileRenamer2.pas"/>
-        <Caret Line="296" TopLine="279"/>
+        <Caret Line="305" Column="14" TopLine="293"/>
       </Position9>
       <Position10>
         <Filename Value="Display\FormFileRenamer2.pas"/>
-        <Caret Line="297" TopLine="279"/>
+        <Caret Line="339" Column="13" TopLine="325"/>
       </Position10>
       <Position11>
         <Filename Value="Display\FormFileRenamer2.pas"/>
-        <Caret Line="298" TopLine="279"/>
+        <Caret Line="82" Column="15" TopLine="69"/>
       </Position11>
       <Position12>
         <Filename Value="Display\FormFileRenamer2.pas"/>
-        <Caret Line="300" TopLine="279"/>
+        <Caret Line="245" Column="3" TopLine="239"/>
       </Position12>
       <Position13>
-        <Filename Value="..\InspectorMike-common\Support\FileSupport.pas"/>
-        <Caret Line="123" TopLine="110"/>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <Caret Line="32" Column="30" TopLine="22"/>
       </Position13>
       <Position14>
-        <Filename Value="..\InspectorMike-common\Support\FileSupport.pas"/>
-        <Caret Line="124" Column="50" TopLine="110"/>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <Caret Line="37" Column="32" TopLine="27"/>
       </Position14>
       <Position15>
-        <Filename Value="..\InspectorMike-common\Support\FileSupport.pas"/>
-        <Caret Line="53" Column="27" TopLine="40"/>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <Caret Line="95" TopLine="81"/>
       </Position15>
       <Position16>
-        <Filename Value="Display\FormFileRenamer2.pas"/>
-        <Caret Line="285" TopLine="279"/>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <Caret Line="99" Column="46" TopLine="81"/>
       </Position16>
       <Position17>
-        <Filename Value="..\InspectorMike-common\Support\ffmpegSupport.pas"/>
-        <Caret Line="147" Column="18" TopLine="126"/>
+        <Filename Value="B:\Apps\Dev\lazarus_trunk\fpcsrc\rtl\objpas\sysutils\datih.inc"/>
+        <Caret Line="193" Column="10" TopLine="173"/>
       </Position17>
       <Position18>
-        <Filename Value="Display\FormFileRenamer2.pas"/>
-        <Caret Line="153" Column="36" TopLine="140"/>
+        <Filename Value="B:\Apps\Dev\lazarus_trunk\fpcsrc\rtl\objpas\sysutils\datih.inc"/>
+        <Caret Line="192" Column="10" TopLine="173"/>
       </Position18>
       <Position19>
-        <Filename Value="Display\FormFileRenamer2.pas"/>
-        <Caret Line="305" Column="14" TopLine="293"/>
+        <Filename Value="B:\Apps\Dev\lazarus_trunk\fpcsrc\rtl\objpas\sysutils\datih.inc"/>
+        <Caret Line="186" Column="21" TopLine="173"/>
       </Position19>
+      <Position20>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <Caret Line="56" Column="38" TopLine="53"/>
+      </Position20>
+      <Position21>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <Caret Line="89" Column="17" TopLine="70"/>
+      </Position21>
+      <Position22>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <Caret Line="128" Column="25" TopLine="124"/>
+      </Position22>
+      <Position23>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <Caret Line="81" Column="7" TopLine="66"/>
+      </Position23>
+      <Position24>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <Caret Line="143" Column="35" TopLine="124"/>
+      </Position24>
+      <Position25>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <Caret Line="81" Column="5" TopLine="67"/>
+      </Position25>
+      <Position26>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <Caret Line="78" Column="11" TopLine="61"/>
+      </Position26>
+      <Position27>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <Caret Line="146" Column="11" TopLine="132"/>
+      </Position27>
+      <Position28>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <Caret Line="140" Column="7" TopLine="127"/>
+      </Position28>
+      <Position29>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <Caret Line="117" Column="11" TopLine="109"/>
+      </Position29>
+      <Position30>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <Caret Line="115" Column="37" TopLine="109"/>
+      </Position30>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>

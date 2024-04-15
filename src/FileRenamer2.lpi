@@ -26,7 +26,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="2"/>
-      <BuildNr Value="178"/>
+      <BuildNr Value="181"/>
       <Language Value="0809"/>
       <Attributes pvaDebug="True"/>
       <StringTable CompanyName="Inspector Mike Pty Ltd" FileDescription="File Renamer and Metadata processor" LegalCopyright="(c) 2022" ProductName="FileRenamer2"/>
@@ -115,22 +115,22 @@
         <IsPartOfProject Value="True"/>
       </Unit9>
       <Unit10>
-        <Filename Value="B:\fpc\packages\fcl-db\src\base\bufdataset_parser.pp"/>
-        <IsPartOfProject Value="True"/>
-      </Unit10>
-      <Unit11>
         <Filename Value="Display\DialogConvertVideo.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgConvertVideo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit11>
-      <Unit12>
+      </Unit10>
+      <Unit11>
         <Filename Value="Display\DialogRenameOptions.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgRenameOptions"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="Classes\TagVideoNFO.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit12>
     </Units>
   </ProjectOptions>
