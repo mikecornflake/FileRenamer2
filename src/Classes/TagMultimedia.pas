@@ -5,10 +5,12 @@ Unit TagMultimedia;
 Interface
 
 Uses
-  Classes, SysUtils, Tags, DB;
+  Classes, SysUtils, Tags, DB, TagVideoNFO;
 
 Type
   TTagVideo = Class(TFileTagger)
+  Private
+    FnfoTagger: TTagVideoNFO;
   Public
     Constructor Create; Override;
     Destructor Destroy; Override;
@@ -23,7 +25,7 @@ Implementation
 Uses
   ffmpegSupport;
 
-{ TTagVideo }
+  { TTagVideo }
 
 Constructor TTagVideo.Create;
 Begin
@@ -41,10 +43,15 @@ Begin
   AddTag('MM_SUB_Codec', ftString, 100, True);
   AddTag('MM_SUB_Stream', ftInteger, -1, True);
   AddTag('MM', ftString, 4096, True);
+
+  FnfoTagger := TTagVideoNFO.Create;
+  FnfoTagger.AddTags(self);
 End;
 
 Destructor TTagVideo.Destroy;
 Begin
+  FreeAndNil(FnfoTagger);
+
   Inherited Destroy;
 End;
 
@@ -56,42 +63,65 @@ End;
 Function TTagVideo.ParseFile(sFilename: String): Boolean;
 Var
   oMediaInfo: TMediaInfo;
+  sFile_nfo: String;
+  oTag: TFileTag;
+  i: Integer;
 Begin
   Result := Inherited ParseFile(sFilename);
 
-  If FileExists(sFilename) And (FFmpegAvailable) Then
+  If FileExists(sFilename) Then
   Begin
-    oMediaInfo := ffmpegSupport.MediaInfo(sFilename);
-
-    If oMediaInfo.Filename = sFilename Then
+    If (FFmpegAvailable) Then
     Begin
-      Tag['MM'] := oMediaInfo.RAW;
+      oMediaInfo := ffmpegSupport.MediaInfo(sFilename);
 
-      Tag['MM_File_Format'] := oMediaInfo.Format;
-      Tag['MM_Streams'] := oMediaInfo.StreamCount;
-      Tag['MM_Width'] := oMediaInfo.Width;
-      Tag['MM_Height'] := oMediaInfo.Height;
-      Tag['MM_Duration'] := oMediaInfo.Duration;
-
-      If oMediaInfo.V_Stream <> -1 Then
+      If oMediaInfo.Filename = sFilename Then
       Begin
-        Tag['MM_VID_Codec'] := oMediaInfo.V_Codec;
-        Tag['MM_VID_Stream'] := oMediaInfo.V_Stream;
-      End;
+        Tag['MM'] := oMediaInfo.RAW;
 
-      If oMediaInfo.A_Stream <> -1 Then
+        Tag['MM_File_Format'] := oMediaInfo.Format;
+        Tag['MM_Streams'] := oMediaInfo.StreamCount;
+        Tag['MM_Width'] := oMediaInfo.Width;
+        Tag['MM_Height'] := oMediaInfo.Height;
+        Tag['MM_Duration'] := oMediaInfo.Duration;
+
+        If oMediaInfo.V_Stream <> -1 Then
+        Begin
+          Tag['MM_VID_Codec'] := oMediaInfo.V_Codec;
+          Tag['MM_VID_Stream'] := oMediaInfo.V_Stream;
+        End;
+
+        If oMediaInfo.A_Stream <> -1 Then
+        Begin
+          Tag['MM_AUD_Codec'] := oMediaInfo.A_Codec;
+          Tag['MM_AUD_Stream'] := oMediaInfo.A_Stream;
+        End;
+
+        If oMediaInfo.S_Stream <> -1 Then
+        Begin
+          Tag['MM_SUB_Codec'] := oMediaInfo.S_Codec;
+          Tag['MM_SUB_Stream'] := oMediaInfo.S_Stream;
+        End;
+
+        FHasTags := True;
+      End;
+    End;
+
+    sFile_nfo := ChangeFileExt(sFilename, '.nfo');
+
+    If FileExists(sFile_nfo) Then
+    Begin
+      FnfoTagger.ParseFile(sFile_nfo);
+
+      If FnfoTagger.HasTags Then
       Begin
-        Tag['MM_AUD_Codec'] := oMediaInfo.A_Codec;
-        Tag['MM_AUD_Stream'] := oMediaInfo.A_Stream;
-      End;
+        For i := 0 To FnfoTagger.Tags.Count - 1 Do
+        Begin
+          oTag := FnfoTagger.Tags.Data[i];
 
-      If oMediaInfo.S_Stream <> -1 Then
-      Begin
-        Tag['MM_SUB_Codec'] := oMediaInfo.S_Codec;
-        Tag['MM_SUB_Stream'] := oMediaInfo.S_Stream;
+          Tag[oTag.Name] := oTag.Value;
+        End;
       End;
-
-      FHasTags := True;
     End;
   End;
 End;

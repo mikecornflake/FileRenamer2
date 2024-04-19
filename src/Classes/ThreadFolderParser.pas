@@ -90,7 +90,7 @@ Implementation
 Uses
   FileSupport, StringSupport, TagCommon;
 
-{ TFileParser }
+  { TFileParser }
 
 Constructor TFileParser.Create(CreateSuspended: Boolean; AFolderParser: TFolderParser);
 Begin
@@ -126,7 +126,6 @@ End;
 Procedure TFileParser.ParseFile;
 Var
   sTemp: String;
-
 Begin
   FFileTags := TFileTaggerList.Create(True);
   Try
@@ -211,7 +210,6 @@ Var
   sExt: String;
   i: Integer;
   oThread: TFileParser;
-
 Begin
   FExtStats.Clear;
   FFiles.Clear;

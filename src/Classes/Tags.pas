@@ -42,12 +42,12 @@ Type
 
     Function GetTag(AName: String): Variant;
     Procedure SetTag(AName: String; AValue: Variant); Virtual;
-
-    Procedure AddTag(AName: String; AFieldType: TFieldType; ASize: Integer = -1;
-      AReadOnly: Boolean = False);
   Public
     Constructor Create; Virtual;
     Destructor Destroy; Override;
+
+    Procedure AddTag(AName: String; AFieldType: TFieldType; ASize: Integer = -1;
+      AReadOnly: Boolean = False);
 
     Function Writeable: Boolean; Virtual;
 
@@ -90,7 +90,7 @@ Type
     Procedure SetTag(AName: String; AValue: Variant);
 
     Procedure DoGetMemo(Sender: TField; Var aText: String; DisplayText: Boolean);
-    Procedure DoSetText(Sender: TField; const aText: string);
+    Procedure DoSetText(Sender: TField; Const aText: String);
   Public
     Constructor Create;
     Destructor Destroy; Override;
@@ -255,8 +255,8 @@ End;
 
 { TTagManager }
 
-procedure TTagManager.AddTagDef(AName: String; AFieldType: TFieldType; ASize: Integer;
-  AReadOnly: Boolean);
+Procedure TTagManager.AddTagDef(AName: String; AFieldType: TFieldType;
+  ASize: Integer; AReadOnly: Boolean);
 Var
   oFileTagDef: TFileTag;
 Begin
@@ -264,12 +264,12 @@ Begin
   FCommonTags.Tags.Add(AName, oFileTagDef);
 End;
 
-function TTagManager.GetDataset: TBufDataset;
+Function TTagManager.GetDataset: TBufDataset;
 Begin
   Result := FFiles.Table;
 End;
 
-constructor TTagManager.Create;
+Constructor TTagManager.Create;
 Begin
   // The TFileTagger Factory
   FFileTaggerClassByExt := TFPHashList.Create;
@@ -288,7 +288,7 @@ Begin
   InitCriticalSection(FDBLock);
 End;
 
-destructor TTagManager.Destroy;
+Destructor TTagManager.Destroy;
 Begin
   DoneCriticalSection(FDBLock);
 
@@ -301,13 +301,13 @@ Begin
   Inherited Destroy;
 End;
 
-procedure TTagManager.BeginUpdate;
+Procedure TTagManager.BeginUpdate;
 Begin
   FVisibleFields.Clear;
   FFiles.Table.DisableControls;
 End;
 
-procedure TTagManager.EndUpdate;
+Procedure TTagManager.EndUpdate;
 Begin
   // Add these at the end to stop some pointless searches during the processing
   FVisibleFields.Add('Count');
@@ -322,7 +322,7 @@ Begin
   FFiles.Table.EnableControls;
 End;
 
-procedure TTagManager.Register(AFileTagger: TFileTaggerClass; AFileExt: array of String);
+Procedure TTagManager.Register(AFileTagger: TFileTaggerClass; AFileExt: Array Of String);
 Var
   oFileTagger: TFileTagger;
   sExt, sFilter: String;
@@ -344,7 +344,7 @@ Begin
   oFileTagger.Filter := sFilter;
 End;
 
-function TTagManager.Build(AFileExt: String): TFileTagger;
+Function TTagManager.Build(AFileExt: String): TFileTagger;
 Var
   i: Integer;
   oClass: TFileTaggerClass;
@@ -359,7 +359,7 @@ Begin
   End;
 End;
 
-procedure TTagManager.DefineTags;
+Procedure TTagManager.DefineTags;
 Var
   i: Integer;
   oField: TField;
@@ -379,19 +379,23 @@ Begin
     For i := 0 To oFileTagger.Tags.Count - 1 Do
     Begin
       oTag := oFileTagger.Tags.Data[i];
-      FFiles.AddField(oTag.Name, oTag.FieldType, oTag.Size);
+      Try
+        If Not FFiles.HasField(oTag.Name) Then
+          FFiles.AddField(oTag.Name, oTag.FieldType, oTag.Size);
+      Except
+      End;
     End;
 
   FFiles.Open;
 
-  FFiles.FieldByName['Filename'].OnSetText:=@DoSetText;
+  FFiles.FieldByName['Filename'].OnSetText := @DoSetText;
 
   For oField In FFiles.Table.Fields Do
     If oField.DataType = ftMemo Then
       oField.OnGetText := @DoGetMemo;
 End;
 
-function TTagManager.TagDefByName(AName: String): TFileTag;
+Function TTagManager.TagDefByName(AName: String): TFileTag;
 Var
   oTemp: TFileTag;
   oFileTagger: TFileTagger;
@@ -409,12 +413,12 @@ Begin
       End;
 End;
 
-function TTagManager.GetFileTagger(AIndex: Integer): TFileTagger;
+Function TTagManager.GetFileTagger(AIndex: Integer): TFileTagger;
 Begin
   Result := FFileTaggers[AIndex];
 End;
 
-function TTagManager.GetTag(AName: String): Variant;
+Function TTagManager.GetTag(AName: String): Variant;
 Var
   oFileTagDef: TFileTag;
 Begin
@@ -425,7 +429,7 @@ Begin
     Result := Null;
 End;
 
-procedure TTagManager.SetTag(AName: String; AValue: Variant);
+Procedure TTagManager.SetTag(AName: String; AValue: Variant);
 Var
   oFileTagDef: TFileTag;
 Begin
@@ -434,23 +438,22 @@ Begin
     oFileTagDef.Value := AValue;
 End;
 
-procedure TTagManager.DoGetMemo(Sender: TField; var aText: String; DisplayText: Boolean);
+Procedure TTagManager.DoGetMemo(Sender: TField; Var aText: String; DisplayText: Boolean);
 Begin
   aText := Sender.AsString;
 End;
 
-procedure TTagManager.DoSetText(Sender: TField; const aText: string);
-begin
+Procedure TTagManager.DoSetText(Sender: TField; Const aText: String);
+Begin
   If Assigned(Sender) And FFiles.Table.Active Then
-    FFiles.Table.FieldByName('Temp').AsString:= Sender.Fieldname + '='+aText;
-end;
+    FFiles.Table.FieldByName('Temp').AsString := Sender.Fieldname + '=' + aText;
+End;
 
-procedure TTagManager.ParseFile(ACommon: TFileTagger; ATags: TFileTaggerList);
+Procedure TTagManager.ParseFile(ACommon: TFileTagger; ATags: TFileTaggerList);
 Var
   oFileTagger: TFileTagger;
   sExt: String;
   sFilename: String;
-
 Begin
   // This routine needs to be threadsafe - use only local or passed variables
 
@@ -468,11 +471,14 @@ Begin
     oFileTagger.ParseFile(sFilename);
 
     If oFileTagger.HasTags Then
-      ACommon.Tag['Tag'] := oFileTagger.Name;
+      If ACommon.Tag['Tag'] = '' Then
+        ACommon.Tag['Tag'] := oFileTagger.Name
+      Else
+        ACommon.Tag['Tag'] := ACommon.Tag['Tag'] + ', ' + oFileTagger.Name;
   End;
 End;
 
-procedure TTagManager.AppendFile(ATags: TFileTaggerList);
+Procedure TTagManager.AppendFile(ATags: TFileTaggerList);
 Var
   oFileTagger: TFileTagger;
   oTag: TFileTag;
@@ -508,13 +514,13 @@ Begin
   End;
 End;
 
-procedure TTagManager.ClearFiles;
+Procedure TTagManager.ClearFiles;
 Begin
   FFiles.ClearAllRecords;
   FVisibleFields.Clear;
 End;
 
-function TTagManager.Update(AFilename, ATag, AValue: String): Boolean;
+Function TTagManager.Update(AFilename, ATag, AValue: String): Boolean;
 (*
 Var
   sPath, sExt: String;
@@ -543,7 +549,7 @@ Begin
 *)
 End;
 
-function TTagManager.Update(AFilename: String; ATag, AValue: array of String): Boolean;
+Function TTagManager.Update(AFilename: String; ATag, AValue: Array Of String): Boolean;
 (*
 Var
   sPath, sExt: String;

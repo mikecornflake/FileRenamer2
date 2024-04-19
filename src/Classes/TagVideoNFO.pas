@@ -8,10 +8,15 @@ Uses
   Classes, SysUtils, Tags, DB;
 
 Type
+
+  { TTagVideoNFO }
+
   TTagVideoNFO = Class(TFileTagger)
   Public
     Constructor Create; Override;
     Destructor Destroy; Override;
+
+    Procedure AddTags(ATag: TFileTagger);
 
     Function Name: String; Override;
 
@@ -29,25 +34,30 @@ Constructor TTagVideoNFO.Create;
 Begin
   Inherited Create;
 
-  AddTag('NFO_Tag', ftString, 25, True);
-
-  AddTag('NFO_Show', ftString, 100, True);
-  AddTag('NFO_Season', ftInteger, -1, True);
-  AddTag('NFO_Episode', ftInteger, -1, True);
-  AddTag('NFO_Title', ftString, 100, True);
-  AddTag('NFO_Aired', ftDateTime, -1, True);
-  AddTag('NFO_Added', ftDateTime, -1, True);
-
-  AddTag('NFO_tmdb', ftString, 10, True);
-  AddTag('NFO_imdb', ftString, 10, True);
-  AddTag('NFO_tvdb', ftString, 10, True);
-
-  AddTag('NFO_Plot', ftString, 4096, True);
+  AddTags(Self);
 End;
 
 Destructor TTagVideoNFO.Destroy;
 Begin
   Inherited Destroy;
+End;
+
+Procedure TTagVideoNFO.AddTags(ATag: TFileTagger);
+Begin
+  ATag.AddTag('NFO_Tag', ftString, 25, True);
+
+  ATag.AddTag('NFO_Show', ftString, 100, False);
+  ATag.AddTag('NFO_Season', ftInteger, -1, False);
+  ATag.AddTag('NFO_Episode', ftInteger, -1, False);
+  ATag.AddTag('NFO_Title', ftString, 100, False);
+  ATag.AddTag('NFO_Aired', ftDateTime, -1, False);
+  ATag.AddTag('NFO_Added', ftDateTime, -1, False);
+
+  ATag.AddTag('NFO_tmdb', ftString, 10, False);
+  ATag.AddTag('NFO_imdb', ftString, 10, False);
+  ATag.AddTag('NFO_tvdb', ftString, 10, False);
+
+  ATag.AddTag('NFO_Plot', ftString, 4096, False);
 End;
 
 Function TTagVideoNFO.Name: String;
@@ -116,23 +126,23 @@ Begin
 
       sNode := oXML.DocumentElement.NodeName;
 
-      if sNode='episodedetails' then
+      If sNode = 'episodedetails' Then
       Begin
         sSeason := Value('season');
         sTitle := Value('title');
         sEpisode := Value('episode');
 
         sAired := Value('aired');
-      end
-      Else if sNode='tvshow' then
-      Begin
-        sAired := Value('year')+'-01-01';
       End
-      Else if sNode='movie' then
+      Else If sNode = 'tvshow' Then
+      Begin
+        sAired := Value('year') + '-01-01';
+      End
+      Else If sNode = 'movie' Then
       Begin
         sTitle := Value('title');
         sAired := Value('premiered');
-      end;
+      End;
 
       sAdded := Value('dateadded');
       sPlot := Value('plot');
