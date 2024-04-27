@@ -1,7 +1,9 @@
 Unit TagVideoNFO;
 
 {$mode objfpc}{$H+}
-
+{$WARN 4104 off : Implicit string type conversion from "$1" to "$2"}
+{$WARN 6058 off : Call to subroutine "$1" marked as inline is not inlined}
+{$WARN 4105 off : Implicit string type conversion with potential data loss from "$1" to "$2"}
 Interface
 
 Uses
@@ -51,11 +53,14 @@ Begin
   ATag.AddTag('NFO_Episode', ftInteger, -1, False);
   ATag.AddTag('NFO_Title', ftString, 100, False);
   ATag.AddTag('NFO_Aired', ftDateTime, -1, False);
+
+  ATag.AddTag('NFO_Genre', ftString, 255, False);
+  ATag.AddTag('NFO_Actors', ftString, 255, False);
+  ATag.AddTag('NFO_Sets', ftString, 255, False);
+
   ATag.AddTag('NFO_Added', ftDateTime, -1, False);
 
-  ATag.AddTag('NFO_tmdb', ftString, 10, False);
-  ATag.AddTag('NFO_imdb', ftString, 10, False);
-  ATag.AddTag('NFO_tvdb', ftString, 10, False);
+  ATag.AddTag('NFO_IDs', ftString, 100, False);
 
   ATag.AddTag('NFO_Plot', ftString, 4096, False);
 End;
@@ -68,11 +73,8 @@ End;
 Function TTagVideoNFO.ParseFile(sFilename: String): Boolean;
 Var
   oXML: TXMLDocument;
-  sShow, sSeason, sEpisode, sTitle, sPlot, tmdbID, sAired, sAdded: String;
-  oUniqueIDs: TDOMNodeList;
-  oID, oNode: TDOMNode;
-  i: Integer;
-  imdbID, tvdbID, sNode: DOMString;
+  sShow, sSeason, sEpisode, sTitle, sPlot, sAired, sAdded, sIDs, sActors, sGenre, sSets: String;
+  sNode: DOMString;
 
   Function Value(Anode: String): String;
   Var
@@ -114,6 +116,46 @@ Var
     End;
   End;
 
+  Function NodesToStr(ANode: String; ANamedItem: String = ''; ASubNode: String = ''): String;
+  Var
+    oElements: TDOMNodeList;
+    i: Integer;
+    oElement, oNode: TDOMNode;
+    sTemp: Unicodestring;
+  Begin
+    Result := '';
+
+    oElements := oXML.GetElementsByTagName(ANode);
+    For i := 0 To oElements.Count - 1 Do
+    Begin
+      oElement := oElements[i];
+      sTemp := Trim(oElement.TextContent);
+
+      If (ANamedItem <> '') Then
+      Begin
+        oNode := oElement.Attributes.GetNamedItem(ANamedItem);
+        sTemp := Format('%s: %s', [oNode.TextContent, sTemp]);
+      End
+      Else
+      If (ASubNode <> '') Then
+      Begin
+        oNode := oElement.FindNode('name');
+        If Assigned(oNode) Then
+          sTemp := oNode.TextContent
+        Else
+          sTemp := '';
+      End;
+
+      If sTemp <> '' Then
+      Begin
+        If Result = '' Then
+          Result := sTemp
+        Else
+          Result := Result + ', ' + LineEnding + sTemp;
+      End;
+    End;
+  End;
+
 Begin
   Result := Inherited ParseFile(sFilename);
 
@@ -122,48 +164,44 @@ Begin
     ReadXMLFile(oXML, sFilename);
     If Assigned(oXML) Then
     Try
-      sShow := Value('showtitle');
-
       sNode := oXML.DocumentElement.NodeName;
 
       If sNode = 'episodedetails' Then
-      Begin
-        sSeason := Value('season');
-        sTitle := Value('title');
-        sEpisode := Value('episode');
-
-        sAired := Value('aired');
-      End
+        sAired := Value('aired')
       Else If sNode = 'tvshow' Then
-      Begin
-        sAired := Value('year') + '-01-01';
-      End
+        sAired := Value('year') + '-01-01'
       Else If sNode = 'movie' Then
+        sAired := Value('premiered')
+      Else If sNode = 'musicvideo' Then
+        sAired := Value('premiered')
+      Else
       Begin
-        sTitle := Value('title');
-        sAired := Value('premiered');
+        // Break, we only want to read Video NFOs
+        Result := False;
+        Exit;
       End;
 
+      sSeason := Value('season');
+      sTitle := Value('title');
+      sEpisode := Value('episode');
+      sShow := Value('showtitle');
       sAdded := Value('dateadded');
-      sPlot := Value('plot');
+      sPlot := Value('outline');
+      If sPlot = '' Then
+        sPlot := Value('plot');
 
-      oUniqueIDs := oXML.GetElementsByTagName('uniqueid');
-      For i := 0 To oUniqueIDs.Count - 1 Do
-      Begin
-        oID := oUniqueIDs[i];
-
-        oNode := oID.Attributes.GetNamedItem('type');
-
-        Case oNode.TextContent Of
-          'tmdb': tmdbID := oID.TextContent;
-          'imdb': imdbID := oID.TextContent;
-          'tvdb': tvdbID := oID.TextContent;
-        End;
-      End;
+      sGenre := NodesToStr('genre', '', '');
+      sIDs := NodesToStr('uniqueid', 'type', '');
+      sActors := NodesToStr('actor', '', 'name');
+      sSets := NodesToStr('set', '', 'name');
 
       Tag['NFO_Tag'] := sNode;
 
-      Tag['NFO_Show'] := sShow;
+      If sShow <> '' Then
+        Tag['NFO_Show'] := sShow
+      Else
+        Tag['NFO_Show'] := Copy(sSets, 1, 255);
+
       Tag['NFO_Season'] := StrToIntDef(sSeason, -1);
       Tag['NFO_Episode'] := StrToIntDef(sEpisode, -1);
 
@@ -171,12 +209,14 @@ Begin
       Tag['NFO_Aired'] := StrToDateDef(sAired);
       Tag['NFO_Added'] := StrToDateDef(sAdded);
 
-      Tag['NFO_tmdb'] := tmdbID;
-      Tag['NFO_imdb'] := imdbID;
-      Tag['NFO_tvdb'] := tvdbID;
+      Tag['NFO_IDs'] := Copy(sIDs, 1, 100);
+      Tag['NFO_Actors'] := Copy(sActors, 1, 255);
+      Tag['NFO_Genre'] := Copy(sGenre, 1, 255);
+      Tag['NFO_Sets'] := Copy(sSets, 1, 255);
 
       Tag['NFO_Plot'] := sPlot;
 
+      Result := True;
       FHasTags := True;
     Finally
       oXML.Free;

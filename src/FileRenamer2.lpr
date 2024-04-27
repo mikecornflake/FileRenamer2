@@ -7,8 +7,7 @@ Uses {$IFDEF UNIX} {$IFDEF UseCThreads}
   cthreads, {$ENDIF} {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, lazcontrols, SysUtils, FormFileRenamer2, Tags, TagMultimedia, TagEXIF,
-  DialogScanFolder, ThreadFolderParser, TagCommon, TagVideoNFO,
-  DialogConvertVideo, DialogRenameOptions;
+  TagVideoNFO;
 
 {$R *.res}
 

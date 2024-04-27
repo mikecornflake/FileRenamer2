@@ -31,6 +31,7 @@ Type
     tbToolbar: TToolBar;
     tmrRefreshUI: TTimer;
     ToolButton1: TToolButton;
+    btnOpen: TToolButton;
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
     btnLoadFolder: TToolButton;
@@ -50,9 +51,9 @@ Type
     Procedure btnClearSelectionClick(Sender: TObject);
     Procedure btnConvertVideoClick(Sender: TObject);
     Procedure btnExportClick(Sender: TObject);
-    Procedure btnInnerCapitaliseClick(Sender: TObject);
     Procedure btnInvertClick(Sender: TObject);
     Procedure btnCaseRenameClick(Sender: TObject);
+    Procedure btnOpenClick(Sender: TObject);
     Procedure btnShowInExplorerClick(Sender: TObject);
     Procedure btnRecalcCountClick(Sender: TObject);
     Procedure btnRefreshClick(Sender: TObject);
@@ -279,7 +280,7 @@ End;
 
 Procedure TfrmRenamer.btnThumbnailerClick(Sender: TObject);
 Var
-  sPath, sVideoFilename, sThumbnail, sPoster, sTemp: String;
+  sPath, sBase, sVideoFilename, sThumbnail, sPoster, sTemp: String;
   oBookmark: TBookMark;
 Begin
   // TODO put all this in a thread...
@@ -301,9 +302,10 @@ Begin
         If IsVideo(FDataset['FileExt']) Then
         Begin
           sPath := IncludeSlash(FDataset['Path']);
-          sVideoFilename := sPath + FDataset['Filename'] + FDataset['FileExt'];
-          sThumbnail := sPath + FDataset['Filename'] + '-thumb.jpg';
-          sPoster := sPath + FDataset['Filename'] + '-poster.jpg';
+          sBase := sPath + FDataset['Filename'];
+          sVideoFilename := sBase + FDataset['FileExt'];
+          sThumbnail := sBase + '-thumb.jpg';
+          sPoster := sBase + '-poster.jpg';
 
           If (Not FileExists(sThumbnail)) And (Not FileExists(sPoster)) Then
           Begin
@@ -324,7 +326,7 @@ Begin
         pbMain.Position := pbMain.Position + 1;
 
         // TODO: you're FIRED!
-        If (pbMain.Position mod 100) = 0 Then
+        If (pbMain.Position Mod 100) = 0 Then
         Begin
           Application.ProcessMessages;
         End;
@@ -379,7 +381,6 @@ Var
   iRenamed, iFailed: Integer;
   sFilename: String;
   sRelativePath, sNew: String;
-  bTemp: Boolean;
   dlgOptions: TdlgRenameOptions;
   optRename: TRenameOptions;
   optCase: TCaseOperation;
@@ -567,11 +568,6 @@ Begin
   End;
 End;
 
-Procedure TfrmRenamer.btnInnerCapitaliseClick(Sender: TObject);
-Begin
-
-End;
-
 Procedure TfrmRenamer.btnShowInExplorerClick(Sender: TObject);
 Var
   sFilename: String;
@@ -580,8 +576,21 @@ Begin
   If (FDataset.Active) And (Not FDataset.IsEmpty) Then
   Begin
     sFilename := FDataset['Original'];
-    If sFilename <> '' Then
+    If (sFilename <> '') And FileExists(sFilename) Then
       LaunchFile('explorer.exe', Format('/e,/select,"%s"', [sFilename]));
+  End;
+End;
+
+Procedure TfrmRenamer.btnOpenClick(Sender: TObject);
+Var
+  sFilename: String;
+Begin
+  FDataset := TagManager.Dataset;
+  If (FDataset.Active) And (Not FDataset.IsEmpty) Then
+  Begin
+    sFilename := FDataset['Original'];
+    If (sFilename <> '') And FileExists(sFilename) Then
+      LaunchDocument(sFilename);
   End;
 End;
 
