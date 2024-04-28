@@ -30,8 +30,8 @@ Type
     FFolderParser: TFolderParser;
     FFilename: String;
     FFileData: TFileData;
-    FFileTags: TFileTaggerList;
-    FFileSystemTags: TFileTagBase;
+    FFileTags: TMetaFileHandlerList;
+    FFileSystemTags: TMetaFileHandler;
     FProcessMeta: Boolean;
     Procedure DoAppendFile;
     Procedure DoSafeParseFile;
@@ -126,7 +126,7 @@ Procedure TFileParser.ParseFile;
 Var
   sTemp: String;
 Begin
-  FFileTags := TFileTaggerList.Create(True);
+  FFileTags := TMetaFileHandlerList.Create(True);
   Try
     FFileSystemTags := TTagFileSystem.Create;
     FFileTags.Add(FFileSystemTags);

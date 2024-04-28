@@ -51,7 +51,7 @@ Uses
 Constructor TdlgScanFolder.Create(TheOwner: TComponent);
 Var
   oMenuItem: TMenuItem;
-  oFileTagger: TFileTagBase;
+  oFileTagger: TMetaFileHandler;
 Begin
   Inherited Create(TheOwner);
 

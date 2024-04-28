@@ -13,7 +13,7 @@ Type
 
   { TTagVideoNFO }
 
-  TTagVideoNFO = Class(TFileTagBase)
+  TTagVideoNFO = Class(TMetaFileHandler)
   Public
     Constructor Create; Override;
     Destructor Destroy; Override;
@@ -21,7 +21,7 @@ Type
     // This particular metadata reader can be called when parsing NFO files,
     // or when parsing video files with NFO
     // The "ownership" of the taglist can be either TTagVideo or TTagVideoNFO
-    Procedure AddTags(ATag: TFileTagBase);
+    Procedure AddTags(AParent: TMetaFileHandler);
 
     Function Name: String; Override;
 
@@ -47,25 +47,26 @@ Begin
   Inherited Destroy;
 End;
 
-Procedure TTagVideoNFO.AddTags(ATag: TFileTagBase);
+// See note at top of unit
+Procedure TTagVideoNFO.AddTags(AParent: TMetaFileHandler);
 Begin
-  ATag.AddTag('NFO_Tag', ftString, 25, True);
+  AParent.AddTag('NFO_Tag', ftString, 25, True);
 
-  ATag.AddTag('NFO_Show', ftString, 100, False);
-  ATag.AddTag('NFO_Season', ftInteger, -1, False);
-  ATag.AddTag('NFO_Episode', ftInteger, -1, False);
-  ATag.AddTag('NFO_Title', ftString, 100, False);
-  ATag.AddTag('NFO_Aired', ftDateTime, -1, False);
+  AParent.AddTag('NFO_Show', ftString, 100, False);
+  AParent.AddTag('NFO_Season', ftInteger, -1, False);
+  AParent.AddTag('NFO_Episode', ftInteger, -1, False);
+  AParent.AddTag('NFO_Title', ftString, 100, False);
+  AParent.AddTag('NFO_Aired', ftDateTime, -1, False);
 
-  ATag.AddTag('NFO_Genre', ftString, 255, False);
-  ATag.AddTag('NFO_Actors', ftString, 255, False);
-  ATag.AddTag('NFO_Sets', ftString, 255, False);
+  AParent.AddTag('NFO_Genre', ftString, 255, False);
+  AParent.AddTag('NFO_Actors', ftString, 255, False);
+  AParent.AddTag('NFO_Sets', ftString, 255, False);
 
-  ATag.AddTag('NFO_Added', ftDateTime, -1, False);
+  AParent.AddTag('NFO_Added', ftDateTime, -1, False);
 
-  ATag.AddTag('NFO_IDs', ftString, 100, False);
+  AParent.AddTag('NFO_IDs', ftString, 100, False);
 
-  ATag.AddTag('NFO_Plot', ftString, 4096, False);
+  AParent.AddTag('NFO_Plot', ftString, 4096, False);
 End;
 
 Function TTagVideoNFO.Name: String;

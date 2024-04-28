@@ -11,7 +11,7 @@ Type
 
   { TTagEXIF }
 
-  TTagEXIF = Class(TFileTagBase)
+  TTagEXIF = Class(TMetaFileHandler)
   Protected
     FFields: TStringList;
     FImgInfo: TImgInfo;

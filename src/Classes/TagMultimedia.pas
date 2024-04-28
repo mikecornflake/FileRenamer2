@@ -8,7 +8,7 @@ Uses
   Classes, SysUtils, Tags, DB, TagVideoNFO;
 
 Type
-  TTagVideo = Class(TFileTagBase)
+  TTagVideo = Class(TMetaFileHandler)
   Private
     FnfoTagger: TTagVideoNFO;
   Public

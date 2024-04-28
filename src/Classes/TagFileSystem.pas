@@ -10,9 +10,12 @@ Uses
 Type
   // This is a list of the File System metadata tags found in all files
 
+  // These are treated differently to the other metadata readers as this data
+  // is ALWAYS loaded, whereas the other readers can be turned on or off
+
   { TTagFileSystem }
 
-  TTagFileSystem = Class(TFileTagBase)
+  TTagFileSystem = Class(TMetaFileHandler)
   Protected
     Procedure SetTag(AName: String; AValue: Variant); Override;
   Public
