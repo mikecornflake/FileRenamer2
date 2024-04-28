@@ -456,6 +456,15 @@ Begin
   ACommon.Tag['Temp'] := '';
   ACommon.Tag['Tag'] := '';
 
+  // TODO Rework this so it cycles through all classes that use this tag
+
+  //i := FFileTaggerClassByExt.FindIndexOf(AFileExt);
+  //If i >= 0 Then
+  //Begin
+  //  oClass := TMetaFileHandlerClass(FFileTaggerClassByExt.Items[i]);
+  //  Result := oClass.Create;
+  //End;
+
   oFileTagger := Build(sExt);
   If Assigned(oFileTagger) Then
   Begin
@@ -465,7 +474,10 @@ Begin
     oFileTagger.ParseFile(sFilename);
 
     If oFileTagger.HasTags Then
-      ACommon.Tag['Tag'] := oFileTagger.Name;
+      If ACommon.Tag['Tag']='' Then
+        ACommon.Tag['Tag'] := oFileTagger.Name
+      Else
+        ACommon.Tag['Tag'] := ACommon.Tag['Tag'] + ', ' + oFileTagger.Name
   End;
 End;
 
