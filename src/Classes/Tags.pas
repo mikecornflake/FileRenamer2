@@ -12,9 +12,9 @@ Const
 
 Type
 
-  { TFileTag }
+  { TMetaTag }
 
-  TFileTag = Class(TObject)
+  TMetaTag = Class(TObject)
   Public
     Name: String;
     FieldType: TFieldType;
@@ -26,13 +26,13 @@ Type
       AReadOnly: Boolean = False);
   End;
 
-  TFileTagList = Specialize TFPGMapObject<String, TFileTag>;
+  TFileTagList = Specialize TFPGMapObject<String, TMetaTag>;
 
-  { TFileTagger }
+  { TFileTagBase }
 
-  TFileTagger = Class(TObject)
+  TFileTagBase = Class(TObject)
   Protected
-    FCommon: TFileTagger;
+    FCommon: TFileTagBase;
     FTags: TFileTagList;
     FFilter: String;
     FHasTags: Boolean;
@@ -56,7 +56,7 @@ Type
     Function ParseFile(AFilename: String): Boolean; Virtual;
     Function Write: Boolean; Virtual;
 
-    Function TagByName(AName: String): TFileTag;
+    Function TagByName(AName: String): TMetaTag;
 
     Property HasTags: Boolean read FHasTags;
     Property Filename: String read FFilename;
@@ -65,11 +65,11 @@ Type
     Property Tags: TFileTagList read FTags;
     Property Tag[AName: String]: Variant read GetTag write SetTag;
 
-    Property Common: TFileTagger read FCommon write FCommon;
+    Property Common: TFileTagBase read FCommon write FCommon;
   End;
 
-  TFileTaggerClass = Class Of TFileTagger;
-  TFileTaggerList = Specialize TFPGObjectList<TFileTagger>;
+  TFileTaggerClass = Class Of TFileTagBase;
+  TFileTaggerList = Specialize TFPGObjectList<TFileTagBase>;
 
   { TTagManager }
 
@@ -79,13 +79,13 @@ Type
     FFileTaggers: TFileTaggerList; // Contains a unique instance of each created FileTagger
     FVisibleFields: TStringList;
     FFiles: TMemTable;
-    FCommonTags: TFileTagger;
+    FCommonTags: TFileTagBase;
     FDBLock: TRTLCriticalSection;
     Procedure AddTagDef(AName: String; AFieldType: TFieldType; ASize: Integer = -1;
       AReadOnly: Boolean = False);
     Function GetDataset: TBufDataset;
 
-    Function GetFileTagger(AIndex: Integer): TFileTagger;
+    Function GetFileTagger(AIndex: Integer): TFileTagBase;
     Function GetTag(AName: String): Variant;
     Procedure SetTag(AName: String; AValue: Variant);
 
@@ -99,14 +99,14 @@ Type
     Procedure EndUpdate;
 
     Procedure DefineTags;
-    Function TagDefByName(AName: String): TFileTag;
+    Function TagDefByName(AName: String): TMetaTag;
 
-    Procedure ParseFile(ACommon: TFileTagger; ATags: TFileTaggerList);
+    Procedure ParseFile(ACommon: TFileTagBase; ATags: TFileTaggerList);
     Procedure AppendFile(ATags: TFileTaggerList);
     Procedure ClearFiles;
 
     Procedure Register(AFileTagger: TFileTaggerClass; AFileExt: Array Of String);
-    Function Build(AFileExt: String): TFileTagger;
+    Function Build(AFileExt: String): TFileTagBase;
 
     // TODO - Implement
     Function Update(AFilename, ATag, AValue: String): Boolean; Overload;
@@ -123,7 +123,7 @@ Function TagManager: TTagManager;
 Implementation
 
 Uses
-  StringSupport, TagCommon;
+  StringSupport, TagFileSystem;
 
 Var
   lTagManager: TTagManager;
@@ -137,9 +137,9 @@ Begin
   Result := lTagManager;
 End;
 
-{ TFileTag }
+{ TMetaTag }
 
-Constructor TFileTag.Create(AName: String; AFieldType: TFieldType; ASize: Integer;
+Constructor TMetaTag.Create(AName: String; AFieldType: TFieldType; ASize: Integer;
   AReadOnly: Boolean);
 Begin
   Name := AName;
@@ -149,9 +149,9 @@ Begin
   Value := Null;
 End;
 
-{ TFileTagger }
+{ TFileTagBase }
 
-Constructor TFileTagger.Create;
+Constructor TFileTagBase.Create;
 Begin
   FTags := TFileTagList.Create(True);
 
@@ -161,19 +161,19 @@ Begin
   FCommon := nil;
 End;
 
-Destructor TFileTagger.Destroy;
+Destructor TFileTagBase.Destroy;
 Begin
   FreeAndNil(FTags);
 
   Inherited Destroy;
 End;
 
-Function TFileTagger.Writeable: Boolean;
+Function TFileTagBase.Writeable: Boolean;
 Begin
   Result := False;
 End;
 
-Function TFileTagger.ParseFile(AFilename: String): Boolean;
+Function TFileTagBase.ParseFile(AFilename: String): Boolean;
 Begin
   Result := False;
   FFilename := AFilename;
@@ -181,14 +181,14 @@ Begin
   ClearTags;
 End;
 
-Function TFileTagger.Write: Boolean;
+Function TFileTagBase.Write: Boolean;
 Begin
   Result := False;
 End;
 
-Function TFileTagger.TagByName(AName: String): TFileTag;
+Function TFileTagBase.TagByName(AName: String): TMetaTag;
 Var
-  oTemp: TFileTag;
+  oTemp: TMetaTag;
 Begin
   Result := nil;
 
@@ -196,14 +196,14 @@ Begin
     Result := oTemp;
 End;
 
-Function TFileTagger.Name: String;
+Function TFileTagBase.Name: String;
 Begin
   Result := BLANK;
 End;
 
-Function TFileTagger.GetTag(AName: String): Variant;
+Function TFileTagBase.GetTag(AName: String): Variant;
 Var
-  oTag: TFileTag;
+  oTag: TMetaTag;
 Begin
   oTag := TagByName(AName);
   If Assigned(oTag) Then
@@ -212,9 +212,9 @@ Begin
     Result := Null;
 End;
 
-Procedure TFileTagger.SetTag(AName: String; AValue: Variant);
+Procedure TFileTagBase.SetTag(AName: String; AValue: Variant);
 Var
-  oTag: TFileTag;
+  oTag: TMetaTag;
 Begin
   oTag := TagByName(AName);
   If Assigned(oTag) Then
@@ -234,7 +234,7 @@ Begin
   End;
 End;
 
-Procedure TFileTagger.ClearTags;
+Procedure TFileTagBase.ClearTags;
 Var
   i: Integer;
 Begin
@@ -244,12 +244,12 @@ Begin
     FTags.Data[i].Value := Null;
 End;
 
-Procedure TFileTagger.AddTag(AName: String; AFieldType: TFieldType; ASize: Integer;
+Procedure TFileTagBase.AddTag(AName: String; AFieldType: TFieldType; ASize: Integer;
   AReadOnly: Boolean);
 Var
-  oFileTagDef: TFileTag;
+  oFileTagDef: TMetaTag;
 Begin
-  oFileTagDef := TFileTag.Create(AName, AFieldType, ASize, AReadOnly);
+  oFileTagDef := TMetaTag.Create(AName, AFieldType, ASize, AReadOnly);
   FTags.Add(AName, oFileTagDef);
 End;
 
@@ -258,9 +258,9 @@ End;
 Procedure TTagManager.AddTagDef(AName: String; AFieldType: TFieldType;
   ASize: Integer; AReadOnly: Boolean);
 Var
-  oFileTagDef: TFileTag;
+  oFileTagDef: TMetaTag;
 Begin
-  oFileTagDef := TFileTag.Create(AName, AFieldType, ASize, AReadOnly);
+  oFileTagDef := TMetaTag.Create(AName, AFieldType, ASize, AReadOnly);
   FCommonTags.Tags.Add(AName, oFileTagDef);
 End;
 
@@ -271,7 +271,7 @@ End;
 
 Constructor TTagManager.Create;
 Begin
-  // The TFileTagger Factory
+  // The TFileTagBase Factory
   FFileTaggerClassByExt := TFPHashList.Create;
 
   // Unique list of FileTaggers
@@ -279,7 +279,7 @@ Begin
 
   FFiles := TMemTable.Create;
 
-  FCommonTags := TTagCommon.Create;
+  FCommonTags := TTagFileSystem.Create;
 
   FVisibleFields := TStringList.Create;
   FVisibleFields.Sorted := True;
@@ -324,7 +324,7 @@ End;
 
 Procedure TTagManager.Register(AFileTagger: TFileTaggerClass; AFileExt: Array Of String);
 Var
-  oFileTagger: TFileTagger;
+  oFileTagger: TFileTagBase;
   sExt, sFilter: String;
 Begin
   oFileTagger := AFileTagger.Create;
@@ -344,7 +344,7 @@ Begin
   oFileTagger.Filter := sFilter;
 End;
 
-Function TTagManager.Build(AFileExt: String): TFileTagger;
+Function TTagManager.Build(AFileExt: String): TFileTagBase;
 Var
   i: Integer;
   oClass: TFileTaggerClass;
@@ -363,8 +363,8 @@ Procedure TTagManager.DefineTags;
 Var
   i: Integer;
   oField: TField;
-  oTag: TFileTag;
-  oFileTagger: TFileTagger;
+  oTag: TMetaTag;
+  oFileTagger: TFileTagBase;
 Begin
   If FFiles.Active Then
     FFiles.Close;
@@ -395,10 +395,10 @@ Begin
       oField.OnGetText := @DoGetMemo;
 End;
 
-Function TTagManager.TagDefByName(AName: String): TFileTag;
+Function TTagManager.TagDefByName(AName: String): TMetaTag;
 Var
-  oTemp: TFileTag;
-  oFileTagger: TFileTagger;
+  oTemp: TMetaTag;
+  oFileTagger: TFileTagBase;
 Begin
   Result := nil;
 
@@ -413,14 +413,14 @@ Begin
       End;
 End;
 
-Function TTagManager.GetFileTagger(AIndex: Integer): TFileTagger;
+Function TTagManager.GetFileTagger(AIndex: Integer): TFileTagBase;
 Begin
   Result := FFileTaggers[AIndex];
 End;
 
 Function TTagManager.GetTag(AName: String): Variant;
 Var
-  oFileTagDef: TFileTag;
+  oFileTagDef: TMetaTag;
 Begin
   oFileTagDef := TagDefByName(AName);
   If Assigned(oFileTagDef) Then
@@ -431,7 +431,7 @@ End;
 
 Procedure TTagManager.SetTag(AName: String; AValue: Variant);
 Var
-  oFileTagDef: TFileTag;
+  oFileTagDef: TMetaTag;
 Begin
   oFileTagDef := TagDefByName(AName);
   If Assigned(oFileTagDef) Then
@@ -449,9 +449,9 @@ Begin
     FFiles.Table.FieldByName('Temp').AsString := Sender.Fieldname + '=' + aText;
 End;
 
-Procedure TTagManager.ParseFile(ACommon: TFileTagger; ATags: TFileTaggerList);
+Procedure TTagManager.ParseFile(ACommon: TFileTagBase; ATags: TFileTaggerList);
 Var
-  oFileTagger: TFileTagger;
+  oFileTagger: TFileTagBase;
   sExt: String;
   sFilename: String;
 Begin
@@ -480,8 +480,8 @@ End;
 
 Procedure TTagManager.AppendFile(ATags: TFileTaggerList);
 Var
-  oFileTagger: TFileTagger;
-  oTag: TFileTag;
+  oFileTagger: TFileTagBase;
+  oTag: TMetaTag;
   i: Integer;
 Begin
   EnterCriticalsection(FDBLock);
@@ -524,7 +524,7 @@ Function TTagManager.Update(AFilename, ATag, AValue: String): Boolean;
 (*
 Var
   sPath, sExt: String;
-  oFileTagger: TFileTagger;
+  oFileTagger: TFileTagBase;
 *)
 Begin
   Result := False;
@@ -553,7 +553,7 @@ Function TTagManager.Update(AFilename: String; ATag, AValue: Array Of String): B
 (*
 Var
   sPath, sExt: String;
-  oFileTagger: TFileTagger;
+  oFileTagger: TFileTagBase;
   i: Integer;
 *)
 Begin

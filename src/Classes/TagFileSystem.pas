@@ -1,4 +1,4 @@
-Unit TagCommon;
+Unit TagFileSystem;
 
 {$mode objfpc}{$H+}
 
@@ -8,10 +8,11 @@ Uses
   Classes, SysUtils, Tags, DB;
 
 Type
+  // This is a list of the File System metadata tags found in all files
 
-  { TTagCommon }
+  { TTagFileSystem }
 
-  TTagCommon = Class(TFileTagger)
+  TTagFileSystem = Class(TFileTagBase)
   Protected
     Procedure SetTag(AName: String; AValue: Variant); Override;
   Public
@@ -25,11 +26,11 @@ Type
 
 Implementation
 
-{ TTagCommon }
+{ TTagFileSystem }
 
-Procedure TTagCommon.SetTag(AName: String; AValue: Variant);
+Procedure TTagFileSystem.SetTag(AName: String; AValue: Variant);
 Var
-  oTag: TFileTag;
+  oTag: TMetaTag;
 Begin
   // Don't make these columns visible (which is what happens in the base class)
   oTag := TagByName(AName);
@@ -40,7 +41,7 @@ Begin
   End;
 End;
 
-Constructor TTagCommon.Create;
+Constructor TTagFileSystem.Create;
 Begin
   Inherited Create;
 
@@ -58,17 +59,17 @@ Begin
   AddTag('Original', ftString, 520, True);
 End;
 
-Destructor TTagCommon.Destroy;
+Destructor TTagFileSystem.Destroy;
 Begin
   Inherited Destroy;
 End;
 
-Function TTagCommon.Name: String;
+Function TTagFileSystem.Name: String;
 Begin
-  Result := 'Common';
+  Result := 'File System';
 End;
 
-Function TTagCommon.ParseFile(sFilename: String): Boolean;
+Function TTagFileSystem.ParseFile(sFilename: String): Boolean;
 Begin
   Result := Inherited ParseFile(sFilename);
   FHasTags := True;

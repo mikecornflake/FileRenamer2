@@ -8,7 +8,7 @@ Uses
   Classes, SysUtils, Tags, DB, TagVideoNFO;
 
 Type
-  TTagVideo = Class(TFileTagger)
+  TTagVideo = Class(TFileTagBase)
   Private
     FnfoTagger: TTagVideoNFO;
   Public
@@ -64,7 +64,7 @@ Function TTagVideo.ParseFile(sFilename: String): Boolean;
 Var
   oMediaInfo: TMediaInfo;
   sFile_nfo: String;
-  oTag: TFileTag;
+  oTag: TMetaTag;
   i: Integer;
 Begin
   Result := Inherited ParseFile(sFilename);

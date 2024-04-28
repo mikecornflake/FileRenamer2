@@ -31,7 +31,7 @@ Type
     FFilename: String;
     FFileData: TFileData;
     FFileTags: TFileTaggerList;
-    FCommon: TFileTagger;
+    FFileSystemTags: TFileTagBase;
     FProcessMeta: Boolean;
     Procedure DoAppendFile;
     Procedure DoSafeParseFile;
@@ -60,7 +60,6 @@ Type
     FFileThreadsRunning: Integer;
     FStarted, FRemaining: TDateTime;
 
-
     Procedure DoParseFolder(AFolder: String);
     Procedure DoFileThreadTerminated(Sender: TObject);
   Public
@@ -88,7 +87,7 @@ Type
 Implementation
 
 Uses
-  FileSupport, StringSupport, TagCommon;
+  FileSupport, StringSupport, TagFileSystem;
 
   { TFileParser }
 
@@ -129,19 +128,19 @@ Var
 Begin
   FFileTags := TFileTaggerList.Create(True);
   Try
-    FCommon := TTagCommon.Create;
-    FFileTags.Add(FCommon);
+    FFileSystemTags := TTagFileSystem.Create;
+    FFileTags.Add(FFileSystemTags);
 
-    FCommon.Tag['Filename'] := FFileData.Filename;
-    FCommon.Tag['FileExt'] := FFileData.Ext;
-    FCommon.Tag['Path'] := FFileData.Path;
-    FCommon.Tag['Date'] := FFileData.Date;
-    FCommon.Tag['Size'] := FFileData.Size;
-    FCommon.Tag['Count'] := FFileData.Count;
-    FCommon.Tag['Parent'] := FFileData.Parent;
-    FCommon.Tag['Parent2'] := FFileData.Parent2;
+    FFileSystemTags.Tag['Filename'] := FFileData.Filename;
+    FFileSystemTags.Tag['FileExt'] := FFileData.Ext;
+    FFileSystemTags.Tag['Path'] := FFileData.Path;
+    FFileSystemTags.Tag['Date'] := FFileData.Date;
+    FFileSystemTags.Tag['Size'] := FFileData.Size;
+    FFileSystemTags.Tag['Count'] := FFileData.Count;
+    FFileSystemTags.Tag['Parent'] := FFileData.Parent;
+    FFileSystemTags.Tag['Parent2'] := FFileData.Parent2;
 
-    FCommon.Tag['Original'] := FFilename;
+    FFileSystemTags.Tag['Original'] := FFilename;
 
     sTemp := Format('Parsing File (%d of %d): %s', [FFolderParser.FilesProcessed,
       FFolderParser.FileCount, FFilename]);
@@ -149,7 +148,7 @@ Begin
 
     If Not Terminated Then
       If FProcessMeta Then
-        TagManager.ParseFile(FCommon, FFileTags);
+        TagManager.ParseFile(FFileSystemTags, FFileTags);
 
     If Not Terminated Then
       Synchronize(@DoAppendFile);
@@ -326,7 +325,6 @@ Begin
   End;
 
   // And now we process the files in this Folder
-
   iMaxLevel := Count('\', AFolder);
   sParent := FolderAtLevel(iMaxLevel - 1);
   sParent2 := FolderAtLevel(iMaxLevel - 2);

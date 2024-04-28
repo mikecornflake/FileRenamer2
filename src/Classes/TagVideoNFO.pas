@@ -13,12 +13,15 @@ Type
 
   { TTagVideoNFO }
 
-  TTagVideoNFO = Class(TFileTagger)
+  TTagVideoNFO = Class(TFileTagBase)
   Public
     Constructor Create; Override;
     Destructor Destroy; Override;
 
-    Procedure AddTags(ATag: TFileTagger);
+    // This particular metadata reader can be called when parsing NFO files,
+    // or when parsing video files with NFO
+    // The "ownership" of the taglist can be either TTagVideo or TTagVideoNFO
+    Procedure AddTags(ATag: TFileTagBase);
 
     Function Name: String; Override;
 
@@ -44,7 +47,7 @@ Begin
   Inherited Destroy;
 End;
 
-Procedure TTagVideoNFO.AddTags(ATag: TFileTagger);
+Procedure TTagVideoNFO.AddTags(ATag: TFileTagBase);
 Begin
   ATag.AddTag('NFO_Tag', ftString, 25, True);
 

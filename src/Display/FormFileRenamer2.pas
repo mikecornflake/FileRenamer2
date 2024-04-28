@@ -804,7 +804,7 @@ End;
 Procedure TfrmRenamer.InitialiseGrid;
 Var
   oColumn: TColumn;
-  oTagDef: TFileTag;
+  oTagDef: TMetaTag;
   i: Integer;
   bVisible: Boolean;
   sTemp: String;

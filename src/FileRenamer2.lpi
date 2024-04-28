@@ -26,7 +26,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="2"/>
-      <BuildNr Value="189"/>
+      <BuildNr Value="190"/>
       <Language Value="0809"/>
       <Attributes pvaDebug="True"/>
       <StringTable CompanyName="Inspector Mike Pty Ltd" FileDescription="File Renamer and Metadata processor" LegalCopyright="(c) 2022" ProductName="FileRenamer2"/>
@@ -111,7 +111,7 @@
         <IsPartOfProject Value="True"/>
       </Unit8>
       <Unit9>
-        <Filename Value="Classes\TagCommon.pas"/>
+        <Filename Value="Classes\TagFileSystem.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit9>
       <Unit10>
