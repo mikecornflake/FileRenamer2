@@ -76,11 +76,14 @@ Type
   TTagManager = Class(TObject)
   Private
     FFileTaggerClassByExt: TFPHashList; // The Factory
+
+    FFiles: TMemTable;
+    FFileSystemTags: TMetaFileHandler;
     FFileTaggers: TMetaFileHandlerList; // Contains a unique instance of each created FileTagger
     FVisibleFields: TStringList;
-    FFiles: TMemTable;
-    FCommonTags: TMetaFileHandler;
+
     FDBLock: TRTLCriticalSection;
+
     Function GetDataset: TBufDataset;
 
     Function GetFileTagger(AIndex: Integer): TMetaFileHandler;
@@ -242,8 +245,8 @@ Begin
     FTags.Data[i].Value := Null;
 End;
 
-Procedure TMetaFileHandler.AddTag(AName: String; AFieldType: TFieldType; ASize: Integer;
-  AReadOnly: Boolean);
+Procedure TMetaFileHandler.AddTag(AName: String; AFieldType: TFieldType;
+  ASize: Integer; AReadOnly: Boolean);
 Var
   oFileTagDef: TMetaTag;
 Begin
@@ -268,7 +271,7 @@ Begin
 
   FFiles := TMemTable.Create;
 
-  FCommonTags := TTagFileSystem.Create;
+  FFileSystemTags := TTagFileSystem.Create;
 
   FVisibleFields := TStringList.Create;
   FVisibleFields.Sorted := True;
@@ -282,7 +285,7 @@ Begin
   DoneCriticalSection(FDBLock);
 
   FreeAndNil(FVisibleFields);
-  FreeAndNil(FCommonTags);
+  FreeAndNil(FFileSystemTags);
   FreeAndNil(FFiles);
   FreeAndNil(FFileTaggers);  // OwnsObjects := True
   FreeAndNil(FFileTaggerClassByExt);
@@ -298,6 +301,7 @@ End;
 
 Procedure TTagManager.EndUpdate;
 Begin
+
   // Add these at the end to stop some pointless searches during the processing
   FVisibleFields.Add('Count');
   FVisibleFields.Add('Filename');
@@ -358,9 +362,9 @@ Begin
   If FFiles.Active Then
     FFiles.Close;
 
-  For i := 0 To FCommonTags.Tags.Count - 1 Do
+  For i := 0 To FFileSystemTags.Tags.Count - 1 Do
   Begin
-    oTag := FCommonTags.Tags.Data[i];
+    oTag := FFileSystemTags.Tags.Data[i];
     FFiles.AddField(oTag.Name, oTag.FieldType, oTag.Size);
   End;
 
@@ -391,7 +395,7 @@ Var
 Begin
   Result := nil;
 
-  If FCommonTags.Tags.TryGetData(AName, oTemp) Then
+  If FFileSystemTags.Tags.TryGetData(AName, oTemp) Then
     Result := oTemp
   Else
     For oFileTagger In FFileTaggers Do
@@ -450,6 +454,7 @@ Begin
   sFilename := ACommon.Tag['Original'];
 
   ACommon.Tag['Temp'] := '';
+  ACommon.Tag['Tag'] := '';
 
   oFileTagger := Build(sExt);
   If Assigned(oFileTagger) Then
@@ -460,10 +465,7 @@ Begin
     oFileTagger.ParseFile(sFilename);
 
     If oFileTagger.HasTags Then
-      If ACommon.Tag['Tag'] = '' Then
-        ACommon.Tag['Tag'] := oFileTagger.Name
-      Else
-        ACommon.Tag['Tag'] := ACommon.Tag['Tag'] + ', ' + oFileTagger.Name;
+      ACommon.Tag['Tag'] := oFileTagger.Name;
   End;
 End;
 

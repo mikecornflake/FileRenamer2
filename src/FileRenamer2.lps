@@ -30,7 +30,8 @@
         <ComponentName Value="frmRenamer"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <CursorPos X="17" Y="807"/>
+        <TopLine Value="778"/>
+        <CursorPos X="23" Y="786"/>
         <UsageCount Value="200"/>
         <Bookmarks Count="1">
           <Item0 X="5" Y="575" ID="1"/>
@@ -42,17 +43,18 @@
         <Filename Value="Classes\Tags.pas"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="246"/>
-        <CursorPos Y="256"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="73"/>
+        <CursorPos X="5" Y="85"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
         <Filename Value="Classes\TagMultimedia.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="3"/>
-        <CursorPos X="37" Y="11"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="48"/>
+        <CursorPos X="23" Y="60"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit4>
@@ -67,7 +69,7 @@
       <Unit6>
         <Filename Value="Classes\TagEXIF.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="6"/>
         <CursorPos X="36" Y="14"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -78,19 +80,19 @@
         <ComponentName Value="dlgScanFolder"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="7"/>
-        <TopLine Value="42"/>
-        <CursorPos X="32" Y="54"/>
+        <EditorIndex Value="9"/>
+        <TopLine Value="41"/>
+        <CursorPos X="32" Y="53"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit7>
       <Unit8>
         <Filename Value="Classes\ThreadFolderParser.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="8"/>
         <TopLine Value="111"/>
         <CursorPos X="36" Y="129"/>
-        <UsageCount Value="185"/>
+        <UsageCount Value="186"/>
         <Bookmarks Count="1">
           <Item0 Y="363" ID="3"/>
         </Bookmarks>
@@ -99,9 +101,10 @@
       <Unit9>
         <Filename Value="Classes\TagFileSystem.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
-        <CursorPos X="26" Y="7"/>
-        <UsageCount Value="178"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="43"/>
+        <CursorPos X="19" Y="6"/>
+        <UsageCount Value="179"/>
         <Loaded Value="True"/>
       </Unit9>
       <Unit10>
@@ -113,7 +116,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="285"/>
         <CursorPos X="22" Y="296"/>
-        <UsageCount Value="78"/>
+        <UsageCount Value="79"/>
       </Unit10>
       <Unit11>
         <Filename Value="Display\DialogRenameOptions.pas"/>
@@ -123,15 +126,15 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="3" Y="17"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit11>
       <Unit12>
         <Filename Value="Classes\TagVideoNFO.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="5"/>
-        <TopLine Value="8"/>
-        <CursorPos X="31" Y="50"/>
-        <UsageCount Value="34"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="160"/>
+        <CursorPos X="39" Y="160"/>
+        <UsageCount Value="35"/>
         <Loaded Value="True"/>
       </Unit12>
       <Unit13>
@@ -1590,18 +1593,20 @@
         <ComponentName Value="FrameGrid"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="282"/>
-        <CursorPos Y="296"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="611"/>
+        <CursorPos X="24" Y="617"/>
         <UsageCount Value="13"/>
+        <Loaded Value="True"/>
       </Unit215>
       <Unit216>
         <Filename Value="B:\Apps\Dev\lazarus_trunk\lazarus\lcl\dbgrids.pas"/>
         <UnitName Value="DBGrids"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="245"/>
-        <CursorPos X="3" Y="252"/>
-        <UsageCount Value="12"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="298"/>
+        <CursorPos X="67" Y="310"/>
+        <UsageCount Value="13"/>
+        <Loaded Value="True"/>
       </Unit216>
       <Unit217>
         <Filename Value="..\..\InspectorMike-common\Support\DialogDBGridColEditor.pas"/>
@@ -1633,125 +1638,125 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1811"/>
         <CursorPos X="31" Y="1815"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="10"/>
       </Unit220>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="481" Column="61" TopLine="480"/>
+        <Filename Value="Display\FormFileRenamer2.pas"/>
+        <Caret Line="100" Column="43" TopLine="81"/>
       </Position1>
       <Position2>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="116" Column="47" TopLine="106"/>
+        <Filename Value="Display\FormFileRenamer2.pas"/>
+        <Caret Line="123" Column="10" TopLine="109"/>
       </Position2>
       <Position3>
         <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="278" Column="39" TopLine="267"/>
+        <Caret Line="113" Column="14" TopLine="103"/>
       </Position3>
       <Position4>
-        <Filename Value="Classes\ThreadFolderParser.pas"/>
-        <Caret Line="40" Column="24" TopLine="21"/>
+        <Filename Value="Classes\Tags.pas"/>
+        <Caret Line="84" Column="14" TopLine="71"/>
       </Position4>
       <Position5>
-        <Filename Value="Classes\ThreadFolderParser.pas"/>
-        <Caret Line="96" Column="3" TopLine="94"/>
+        <Filename Value="Display\FormFileRenamer2.pas"/>
+        <Caret Line="118" Column="13" TopLine="109"/>
       </Position5>
       <Position6>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="278" Column="39" TopLine="267"/>
+        <Filename Value="Display\FormFileRenamer2.pas"/>
+        <Caret Line="785" Column="5" TopLine="773"/>
       </Position6>
       <Position7>
         <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="170" Column="22" TopLine="163"/>
+        <Caret Line="97" Column="15" TopLine="86"/>
       </Position7>
       <Position8>
         <Filename Value="Classes\Tags.pas"/>
+        <Caret Line="301" TopLine="298"/>
       </Position8>
       <Position9>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="35" Column="12" TopLine="24"/>
+        <Filename Value="Display\FormFileRenamer2.pas"/>
+        <Caret Line="778" Column="21" TopLine="773"/>
       </Position9>
       <Position10>
-        <Filename Value="Classes\Tags.pas"/>
+        <Filename Value="Display\FormFileRenamer2.pas"/>
       </Position10>
       <Position11>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="82" Column="16" TopLine="62"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
       </Position11>
       <Position12>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="264" Column="14" TopLine="244"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
+        <Caret Line="428" TopLine="374"/>
       </Position12>
       <Position13>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="258" Column="32" TopLine="256"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
       </Position13>
       <Position14>
-        <Filename Value="Classes\Tags.pas"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
+        <Caret Line="94" Column="10" TopLine="75"/>
       </Position14>
       <Position15>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="84" Column="24" TopLine="64"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
+        <Caret Line="139" Column="24" TopLine="120"/>
       </Position15>
       <Position16>
-        <Filename Value="Classes\TagFileSystem.pas"/>
-        <Caret Line="13" Column="32" TopLine="6"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
+        <Caret Line="142" Column="42" TopLine="124"/>
       </Position16>
       <Position17>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="282" Column="14" TopLine="265"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
+        <Caret Line="198" Column="23" TopLine="185"/>
       </Position17>
       <Position18>
-        <Filename Value="Classes\Tags.pas"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
+        <Caret Line="428" Column="31" TopLine="414"/>
       </Position18>
       <Position19>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="82" Column="16" TopLine="62"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
+        <Caret Line="433" Column="12" TopLine="414"/>
       </Position19>
       <Position20>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="264" Column="14" TopLine="244"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
+        <Caret Line="435" Column="23" TopLine="421"/>
       </Position20>
       <Position21>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="282" Column="14" TopLine="262"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
+        <Caret Line="437" Column="39" TopLine="421"/>
       </Position21>
       <Position22>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="296" Column="25" TopLine="276"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
+        <Caret Line="441" Column="8" TopLine="421"/>
       </Position22>
       <Position23>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="372" Column="28" TopLine="358"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
+        <Caret Line="563" Column="25" TopLine="556"/>
       </Position23>
       <Position24>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="374" Column="24" TopLine="358"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
+        <Caret Line="570" Column="23" TopLine="556"/>
       </Position24>
       <Position25>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="405" Column="17" TopLine="388"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
+        <Caret Line="572" Column="24" TopLine="556"/>
       </Position25>
       <Position26>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="82" Column="16" TopLine="69"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
+        <Caret Line="573" Column="23" TopLine="556"/>
       </Position26>
       <Position27>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="258" Column="32" TopLine="244"/>
+        <Filename Value="..\..\InspectorMike-common\Display\Frames\FrameGrids.pas"/>
+        <Caret Line="575" Column="23" TopLine="556"/>
       </Position27>
       <Position28>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="84" Column="24" TopLine="71"/>
+        <Filename Value="Display\FormFileRenamer2.pas"/>
       </Position28>
       <Position29>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="258" Column="32" TopLine="238"/>
+        <Filename Value="Display\DialogScanFolder.pas"/>
+        <Caret Line="53" Column="32" TopLine="41"/>
       </Position29>
       <Position30>
-        <Filename Value="Classes\Tags.pas"/>
-        <Caret Line="84" TopLine="71"/>
+        <Filename Value="Display\FormFileRenamer2.pas"/>
+        <Caret Line="776" Column="12" TopLine="780"/>
       </Position30>
     </JumpHistory>
     <RunParams>

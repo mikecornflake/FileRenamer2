@@ -143,7 +143,7 @@ Var
       Else
       If (ASubNode <> '') Then
       Begin
-        oNode := oElement.FindNode('name');
+        oNode := oElement.FindNode(ASubNode);
         If Assigned(oNode) Then
           sTemp := oNode.TextContent
         Else

@@ -104,7 +104,6 @@ Function TTagEXIF.ParseFile(sFilename: String): Boolean;
 Var
   sTag, sField, sTemp: String;
   i: Integer;
-
 Begin
   Result := Inherited ParseFile(sFilename);
 
@@ -119,7 +118,7 @@ Begin
     Begin
       For sField In FFields Do
       Begin
-          // Strip the EXIF prefix...
+        // Strip the EXIF prefix...
         sTag := Copy(sField, 6, Length(sField) - 5);
 
         SetTag(sField, sTag);

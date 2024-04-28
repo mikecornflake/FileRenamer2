@@ -773,6 +773,7 @@ End;
 Procedure TfrmRenamer.FolderParserTerminated(Sender: TObject);
 Var
   i: Integer;
+  oColumn: TColumn;
 Begin
   Screen.Cursor := crDefault;
 
@@ -791,6 +792,11 @@ Begin
 
     Status := Format('%s: %d files scanned', [FRootpath, FFolderParser.FileCount]);
   End;
+
+  // Ensure the dataset is sorted (Thread loading means it's randomised by default)
+  oColumn := fmeGrid.grdSQL.Columns.ColumnByFieldname('Original');
+  If Assigned(oColumn) Then
+    fmeGrid.grdSQLTitleClick(oColumn);
 
   TagManager.EndUpdate;
 

@@ -10,7 +10,7 @@ Uses
 Type
   TTagVideo = Class(TMetaFileHandler)
   Private
-    FnfoTagger: TTagVideoNFO;
+    FHasNFO: Boolean;
   Public
     Constructor Create; Override;
     Destructor Destroy; Override;
@@ -44,24 +44,25 @@ Begin
   AddTag('MM_SUB_Stream', ftInteger, -1, True);
   AddTag('MM', ftString, 4096, True);
 
-  FnfoTagger := TTagVideoNFO.Create;
-  FnfoTagger.AddTags(self);
+  FHasNFO := False;
 End;
 
 Destructor TTagVideo.Destroy;
 Begin
-  FreeAndNil(FnfoTagger);
-
   Inherited Destroy;
 End;
 
 Function TTagVideo.Name: String;
 Begin
-  Result := 'Video';
+  If FHasNFO Then
+    Result := 'Video, Video NFO'
+  Else
+    Result := 'Video';
 End;
 
 Function TTagVideo.ParseFile(sFilename: String): Boolean;
 Var
+  oNFO: TTagVideoNFO;
   oMediaInfo: TMediaInfo;
   sFile_nfo: String;
   oTag: TMetaTag;
@@ -111,16 +112,24 @@ Begin
 
     If FileExists(sFile_nfo) Then
     Begin
-      FnfoTagger.ParseFile(sFile_nfo);
+      oNFO := TTagVideoNFO.Create;
+      Try
+        FHasNFO := True;
+        oNFO.AddTags(self);
 
-      If FnfoTagger.HasTags Then
-      Begin
-        For i := 0 To FnfoTagger.Tags.Count - 1 Do
+        oNFO.ParseFile(sFile_nfo);
+
+        If oNFO.HasTags Then
         Begin
-          oTag := FnfoTagger.Tags.Data[i];
+          For i := 0 To oNFO.Tags.Count - 1 Do
+          Begin
+            oTag := oNFO.Tags.Data[i];
 
-          Tag[oTag.Name] := oTag.Value;
+            Tag[oTag.Name] := oTag.Value;
+          End;
         End;
+      Finally
+        FreeAndNil(oNFO);
       End;
     End;
   End;

@@ -31,7 +31,6 @@ Type
     Function GetProcessMeta: Boolean;
     Procedure SetFilter(AValue: String);
     Procedure SetFolder(AValue: String);
-
   Public
     Constructor Create(TheOwner: TComponent); Override;
 
@@ -46,7 +45,7 @@ Implementation
 Uses
   Tags, DBSupport, StringSupport;
 
-{$R *.lfm}
+  {$R *.lfm}
 
 Constructor TdlgScanFolder.Create(TheOwner: TComponent);
 Var

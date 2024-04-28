@@ -13,6 +13,9 @@ Type
   // These are treated differently to the other metadata readers as this data
   // is ALWAYS loaded, whereas the other readers can be turned on or off
 
+  // As such, this is not "registered" with the TagManager, the TagManager
+  // handles TTagFileSystem independently
+
   { TTagFileSystem }
 
   TTagFileSystem = Class(TMetaFileHandler)
