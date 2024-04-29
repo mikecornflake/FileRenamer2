@@ -18,11 +18,6 @@ Type
     Constructor Create; Override;
     Destructor Destroy; Override;
 
-    // This particular metadata reader can be called when parsing NFO files,
-    // or when parsing video files with NFO
-    // The "ownership" of the taglist can be either TTagVideo or TTagVideoNFO
-    Procedure AddTags(AParent: TMetaFileHandler);
-
     Function Name: String; Override;
 
     Function ParseFile(sFilename: String): Boolean; Override;
@@ -39,34 +34,28 @@ Constructor TTagVideoNFO.Create;
 Begin
   Inherited Create;
 
-  AddTags(Self);
+  AddTag('NFO_Tag', ftString, 25, True);
+
+  AddTag('NFO_Show', ftString, 100, False);
+  AddTag('NFO_Season', ftInteger, -1, False);
+  AddTag('NFO_Episode', ftInteger, -1, False);
+  AddTag('NFO_Title', ftString, 100, False);
+  AddTag('NFO_Aired', ftDateTime, -1, False);
+
+  AddTag('NFO_Genre', ftString, 255, False);
+  AddTag('NFO_Actors', ftString, 255, False);
+  AddTag('NFO_Sets', ftString, 255, False);
+
+  AddTag('NFO_Added', ftDateTime, -1, False);
+
+  AddTag('NFO_IDs', ftString, 100, False);
+
+  AddTag('NFO_Plot', ftString, 4096, False);
 End;
 
 Destructor TTagVideoNFO.Destroy;
 Begin
   Inherited Destroy;
-End;
-
-// See note at top of unit
-Procedure TTagVideoNFO.AddTags(AParent: TMetaFileHandler);
-Begin
-  AParent.AddTag('NFO_Tag', ftString, 25, True);
-
-  AParent.AddTag('NFO_Show', ftString, 100, False);
-  AParent.AddTag('NFO_Season', ftInteger, -1, False);
-  AParent.AddTag('NFO_Episode', ftInteger, -1, False);
-  AParent.AddTag('NFO_Title', ftString, 100, False);
-  AParent.AddTag('NFO_Aired', ftDateTime, -1, False);
-
-  AParent.AddTag('NFO_Genre', ftString, 255, False);
-  AParent.AddTag('NFO_Actors', ftString, 255, False);
-  AParent.AddTag('NFO_Sets', ftString, 255, False);
-
-  AParent.AddTag('NFO_Added', ftDateTime, -1, False);
-
-  AParent.AddTag('NFO_IDs', ftString, 100, False);
-
-  AParent.AddTag('NFO_Plot', ftString, 4096, False);
 End;
 
 Function TTagVideoNFO.Name: String;
@@ -77,7 +66,8 @@ End;
 Function TTagVideoNFO.ParseFile(sFilename: String): Boolean;
 Var
   oXML: TXMLDocument;
-  sShow, sSeason, sEpisode, sTitle, sPlot, sAired, sAdded, sIDs, sActors, sGenre, sSets: String;
+  sShow, sSeason, sEpisode, sTitle, sPlot, sAired, sAdded, sIDs, sActors, sGenre, sSets,
+    sExt: String;
   sNode: DOMString;
 
   Function Value(Anode: String): String;
@@ -161,6 +151,10 @@ Var
   End;
 
 Begin
+  sExt := Lowercase(ExtractFileExt(sFilename));
+  If sExt<>'.nfo' Then
+    sFilename := ChangeFileExt(sFilename, '.nfo');
+
   Result := Inherited ParseFile(sFilename);
 
   If FileExists(sFilename) Then
@@ -229,6 +223,7 @@ Begin
 End;
 
 Initialization
-  TagManager.Register(TTagVideoNFO, ['.nfo']);
+  TagManager.Register(TTagVideoNFO, ['.nfo', '.pkt', '.mpg', '.mp4', '.mkv', '.avi', '.wmv',
+    '.asf', '.mov', '.flv', '.m4v']);
 
 End.

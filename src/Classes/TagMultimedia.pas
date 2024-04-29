@@ -5,7 +5,7 @@ Unit TagMultimedia;
 Interface
 
 Uses
-  Classes, SysUtils, Tags, DB, TagVideoNFO;
+  Classes, SysUtils, Tags, DB;
 
 Type
   TTagVideo = Class(TMetaFileHandler)
@@ -62,11 +62,7 @@ End;
 
 Function TTagVideo.ParseFile(sFilename: String): Boolean;
 Var
-  oNFO: TTagVideoNFO;
   oMediaInfo: TMediaInfo;
-  sFile_nfo: String;
-  oTag: TMetaTag;
-  i: Integer;
 Begin
   Result := Inherited ParseFile(sFilename);
 
@@ -107,31 +103,6 @@ Begin
         FHasTags := True;
       End;
     End;
-
-    sFile_nfo := ChangeFileExt(sFilename, '.nfo');
-
-    If FileExists(sFile_nfo) Then
-    Begin
-      oNFO := TTagVideoNFO.Create;
-      Try
-        FHasNFO := True;
-        oNFO.AddTags(self);
-
-        oNFO.ParseFile(sFile_nfo);
-
-        If oNFO.HasTags Then
-        Begin
-          For i := 0 To oNFO.Tags.Count - 1 Do
-          Begin
-            oTag := oNFO.Tags.Data[i];
-
-            Tag[oTag.Name] := oTag.Value;
-          End;
-        End;
-      Finally
-        FreeAndNil(oNFO);
-      End;
-    End;
   End;
 End;
 
@@ -139,6 +110,6 @@ Initialization
   InitializeFFmpeg;
 
   TagManager.Register(TTagVideo, ['.pkt', '.mpg', '.mp4', '.mkv', '.avi', '.wmv',
-    '.asf', '.mov', '.flv', '.m4v']);
+    '.asf', '.mov', '.flv', '.m4v', '.jpg']);
 
 End.
