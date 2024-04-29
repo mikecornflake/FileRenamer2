@@ -21,7 +21,7 @@ Type
 Implementation
 
 Uses
-  ffmpegSupport;
+  ffmpegSupport, FileSupport;
 
   { TTagMedia }
 
@@ -56,6 +56,7 @@ End;
 Function TTagMedia.ParseFile(sFilename: String): Boolean;
 Var
   oMediaInfo: TMediaInfo;
+  sExt: String;
 Begin
   Result := Inherited ParseFile(sFilename);
 
@@ -63,6 +64,8 @@ Begin
   Begin
     If (FFmpegAvailable) Then
     Begin
+      sExt := ExtractFileExt(sFilename);
+
       oMediaInfo := ffmpegSupport.MediaInfo(sFilename);
 
       If oMediaInfo.Filename = sFilename Then
@@ -78,7 +81,7 @@ Begin
         If oMediaInfo.Height <> 0 Then
           Tag['MM_Height'] := oMediaInfo.Height;
 
-        If oMediaInfo.Format<>'image2' Then
+        If Not IsImage(sExt) Then
         Begin
           Tag['MM_Duration'] := oMediaInfo.Duration;
 
@@ -87,7 +90,7 @@ Begin
             Tag['MM_VID_Codec'] := oMediaInfo.V_Codec;
             Tag['MM_VID_Stream'] := oMediaInfo.V_Stream;
           End;
-        end;
+        End;
 
         If oMediaInfo.A_Stream <> -1 Then
         Begin
@@ -110,7 +113,8 @@ End;
 Initialization
   InitializeFFmpeg;
 
-  TagManager.Register(TTagMedia, ['.pkt', '.mpg', '.mp4', '.mkv', '.avi', '.wmv',
-    '.asf', '.mov', '.flv', '.m4v', '.jpg', '.png', '.bmp', '.mp3']);
+  TagManager.Register(TTagMedia, FileExtVideo);
+  TagManager.Register(TTagMedia, FileExtImage);
+  TagManager.Register(TTagMedia, FileExtAudio);
 
 End.

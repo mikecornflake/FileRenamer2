@@ -28,7 +28,7 @@ Type
 Implementation
 
 Uses
-  xmlread, DOM;
+  xmlread, DOM, FileSupport;
 
   { TTagVideoNFO }
 
@@ -62,14 +62,18 @@ End;
 
 Function TTagVideoNFO.Name: String;
 Begin
-  Result := 'nfo.'+FRoot;
+  If FRoot = '' Then
+    Result := 'nfo.xml'
+  Else
+    Result := 'nfo.xml.' + FRoot;
+
 End;
 
 Function TTagVideoNFO.ParseFile(sFilename: String): Boolean;
 Var
   oXML: TXMLDocument;
-  sShow, sSeason, sEpisode, sTitle, sPlot, sAired, sAdded, sIDs, sActors, sGenre, sSets,
-    sExt: String;
+  sShow, sSeason, sEpisode, sTitle, sPlot, sAired, sAdded, sIDs, sActors, sGenre,
+  sSets, sExt: String;
 
   Function Value(Anode: String): String;
   Var
@@ -153,7 +157,7 @@ Var
 
 Begin
   sExt := Lowercase(ExtractFileExt(sFilename));
-  If sExt<>'.nfo' Then
+  If sExt <> '.nfo' Then
     sFilename := ChangeFileExt(sFilename, '.nfo');
 
   Result := Inherited ParseFile(sFilename);
@@ -224,7 +228,7 @@ Begin
 End;
 
 Initialization
-  TagManager.Register(TTagVideoNFO, ['.nfo', '.pkt', '.mpg', '.mp4', '.mkv', '.avi', '.wmv',
-    '.asf', '.mov', '.flv', '.m4v']);
+  TagManager.Register(TTagVideoNFO, ['.nfo']);
+  TagManager.Register(TTagVideoNFO, FileExtVideo);
 
 End.

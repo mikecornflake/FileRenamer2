@@ -79,7 +79,8 @@ Type
 
     FFiles: TMemTable;
     FFileSystemTags: TMetaFileHandler;
-    FMetaFileHandlers: TMetaFileHandlerList; // Contains a unique instance of each created MetaFileHandler
+    FMetaFileHandlers: TMetaFileHandlerList;
+    // Contains a unique instance of each created MetaFileHandler
     FVisibleFields: TStringList;
 
     FDBLock: TRTLCriticalSection;
@@ -460,10 +461,10 @@ Begin
   ACommon.Tag['Tag'] := '';
 
   // Iterate over all TMetaFileHandler's, apply each one that applies
-  For i := 0 To FMetaFileHandlerClassByExt.Count-1 Do
+  For i := 0 To FMetaFileHandlerClassByExt.Count - 1 Do
   Begin
     sTemp := FMetaFileHandlerClassByExt.NameOfIndex(i);
-    If sTemp=sExt Then
+    If sTemp = sExt Then
     Begin
       oClass := TMetaFileHandlerClass(FMetaFileHandlerClassByExt.Items[i]);
       oMetaFileHandler := oClass.Create;
@@ -473,27 +474,12 @@ Begin
       oMetaFileHandler.ParseFile(sFilename);
 
       If oMetaFileHandler.HasTags Then
-        If ACommon.Tag['Tag']='' Then
+        If ACommon.Tag['Tag'] = '' Then
           ACommon.Tag['Tag'] := oMetaFileHandler.Name
         Else
-          ACommon.Tag['Tag'] := ACommon.Tag['Tag'] + ', ' + oMetaFileHandler.Name
+          ACommon.Tag['Tag'] := ACommon.Tag['Tag'] + ', ' + oMetaFileHandler.Name;
     End;
   End;
-
-  //oMetaFileHandler := Build(sExt);
-  //If Assigned(oMetaFileHandler) Then
-  //Begin
-  //  ATags.Add(oMetaFileHandler);
-  //
-  //  oMetaFileHandler.Common := ACommon;
-  //  oMetaFileHandler.ParseFile(sFilename);
-  //
-  //  If oMetaFileHandler.HasTags Then
-  //    If ACommon.Tag['Tag']='' Then
-  //      ACommon.Tag['Tag'] := oMetaFileHandler.Name
-  //    Else
-  //      ACommon.Tag['Tag'] := ACommon.Tag['Tag'] + ', ' + oMetaFileHandler.Name
-  //End;
 End;
 
 Procedure TTagManager.AppendFile(ATags: TMetaFileHandlerList);
