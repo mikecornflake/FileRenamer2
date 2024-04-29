@@ -50,7 +50,7 @@ Uses
 Constructor TdlgScanFolder.Create(TheOwner: TComponent);
 Var
   oMenuItem: TMenuItem;
-  oFileTagger: TMetaFileHandler;
+  oMetaFileHandler: TMetaFileHandler;
 Begin
   Inherited Create(TheOwner);
 
@@ -60,10 +60,10 @@ Begin
 
   mnuFilter.Items.Add(oMenuItem);
 
-  For oFileTagger In TagManager.FileTaggers Do
+  For oMetaFileHandler In TagManager.MetaFileHandlers Do
   Begin
     oMenuItem := TMenuItem.Create(mnuFilter);
-    oMenuItem.Caption := Format('%s (%s)', [oFileTagger.Name, oFileTagger.Filter]);
+    oMenuItem.Caption := Format('%s (%s)', [oMetaFileHandler.Name, oMetaFileHandler.Filter]);
     oMenuItem.OnClick := @DoSelectFilter;
 
     mnuFilter.Items.Add(oMenuItem);

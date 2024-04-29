@@ -75,18 +75,18 @@ Type
 
   TTagManager = Class(TObject)
   Private
-    FFileTaggerClassByExt: TFPHashList; // The Factory
+    FMetaFileHandlerClassByExt: TFPHashList; // The Factory
 
     FFiles: TMemTable;
     FFileSystemTags: TMetaFileHandler;
-    FFileTaggers: TMetaFileHandlerList; // Contains a unique instance of each created FileTagger
+    FMetaFileHandlers: TMetaFileHandlerList; // Contains a unique instance of each created MetaFileHandler
     FVisibleFields: TStringList;
 
     FDBLock: TRTLCriticalSection;
 
     Function GetDataset: TBufDataset;
 
-    Function GetFileTagger(AIndex: Integer): TMetaFileHandler;
+    Function GetMetaFileHandler(AIndex: Integer): TMetaFileHandler;
     Function GetTag(AName: String): Variant;
     Procedure SetTag(AName: String; AValue: Variant);
 
@@ -106,7 +106,7 @@ Type
     Procedure AppendFile(ATags: TMetaFileHandlerList);
     Procedure ClearFiles;
 
-    Procedure Register(AFileTagger: TMetaFileHandlerClass; AFileExt: Array Of String);
+    Procedure Register(AMetaFileHandler: TMetaFileHandlerClass; AFileExt: Array Of String);
     Function Build(AFileExt: String): TMetaFileHandler;
 
     // TODO - Implement
@@ -114,7 +114,7 @@ Type
     Function Update(AFilename: String; ATag, AValue: Array Of String): Boolean; Overload;
 
     Property Dataset: TBufDataset read GetDataset;
-    Property FileTaggers: TMetaFileHandlerList read FFileTaggers;
+    Property MetaFileHandlers: TMetaFileHandlerList read FMetaFileHandlers;
     Property Tag[AName: String]: Variant read GetTag write SetTag;
     Property VisibleFields: TStringList read FVisibleFields;
   End;
@@ -264,10 +264,10 @@ End;
 Constructor TTagManager.Create;
 Begin
   // The TMetaFileHandler Factory
-  FFileTaggerClassByExt := TFPHashList.Create;
+  FMetaFileHandlerClassByExt := TFPHashList.Create;
 
-  // Unique list of FileTaggers
-  FFileTaggers := TMetaFileHandlerList.Create(True);
+  // Unique list of MetaFileHandlers
+  FMetaFileHandlers := TMetaFileHandlerList.Create(True);
 
   FFiles := TMemTable.Create;
 
@@ -287,8 +287,8 @@ Begin
   FreeAndNil(FVisibleFields);
   FreeAndNil(FFileSystemTags);
   FreeAndNil(FFiles);
-  FreeAndNil(FFileTaggers);  // OwnsObjects := True
-  FreeAndNil(FFileTaggerClassByExt);
+  FreeAndNil(FMetaFileHandlers);  // OwnsObjects := True
+  FreeAndNil(FMetaFileHandlerClassByExt);
 
   Inherited Destroy;
 End;
@@ -315,13 +315,13 @@ Begin
   FFiles.Table.EnableControls;
 End;
 
-Procedure TTagManager.Register(AFileTagger: TMetaFileHandlerClass; AFileExt: Array Of String);
+Procedure TTagManager.Register(AMetaFileHandler: TMetaFileHandlerClass; AFileExt: Array Of String);
 Var
-  oFileTagger: TMetaFileHandler;
+  oMetaFileHandler: TMetaFileHandler;
   sExt, sFilter: String;
 Begin
-  oFileTagger := AFileTagger.Create;
-  FFileTaggers.Add(oFileTagger);
+  oMetaFileHandler := AMetaFileHandler.Create;
+  FMetaFileHandlers.Add(oMetaFileHandler);
 
   sFilter := '';
   For sExt In AFileExt Do
@@ -331,10 +331,10 @@ Begin
     Else
       sFilter := Format('%s;*%s', [sFilter, sExt]);
 
-    FFileTaggerClassByExt.Add(Lowercase(sExt), Pointer(AFileTagger));
+    FMetaFileHandlerClassByExt.Add(Lowercase(sExt), Pointer(AMetaFileHandler));
   End;
 
-  oFileTagger.Filter := sFilter;
+  oMetaFileHandler.Filter := sFilter;
 End;
 
 Function TTagManager.Build(AFileExt: String): TMetaFileHandler;
@@ -344,10 +344,10 @@ Var
 Begin
   Result := nil;
 
-  i := FFileTaggerClassByExt.FindIndexOf(AFileExt);
+  i := FMetaFileHandlerClassByExt.FindIndexOf(AFileExt);
   If i >= 0 Then
   Begin
-    oClass := TMetaFileHandlerClass(FFileTaggerClassByExt.Items[i]);
+    oClass := TMetaFileHandlerClass(FMetaFileHandlerClassByExt.Items[i]);
     Result := oClass.Create;
   End;
 End;
@@ -357,7 +357,7 @@ Var
   i: Integer;
   oField: TField;
   oTag: TMetaTag;
-  oFileTagger: TMetaFileHandler;
+  oMetaFileHandler: TMetaFileHandler;
 Begin
   If FFiles.Active Then
     FFiles.Close;
@@ -368,10 +368,10 @@ Begin
     FFiles.AddField(oTag.Name, oTag.FieldType, oTag.Size);
   End;
 
-  For oFileTagger In FFileTaggers Do
-    For i := 0 To oFileTagger.Tags.Count - 1 Do
+  For oMetaFileHandler In FMetaFileHandlers Do
+    For i := 0 To oMetaFileHandler.Tags.Count - 1 Do
     Begin
-      oTag := oFileTagger.Tags.Data[i];
+      oTag := oMetaFileHandler.Tags.Data[i];
       Try
         If Not FFiles.HasField(oTag.Name) Then
           FFiles.AddField(oTag.Name, oTag.FieldType, oTag.Size);
@@ -391,24 +391,24 @@ End;
 Function TTagManager.TagDefByName(AName: String): TMetaTag;
 Var
   oTemp: TMetaTag;
-  oFileTagger: TMetaFileHandler;
+  oMetaFileHandler: TMetaFileHandler;
 Begin
   Result := nil;
 
   If FFileSystemTags.Tags.TryGetData(AName, oTemp) Then
     Result := oTemp
   Else
-    For oFileTagger In FFileTaggers Do
-      If oFileTagger.Tags.TryGetData(AName, oTemp) Then
+    For oMetaFileHandler In FMetaFileHandlers Do
+      If oMetaFileHandler.Tags.TryGetData(AName, oTemp) Then
       Begin
         Result := oTemp;
         Break;
       End;
 End;
 
-Function TTagManager.GetFileTagger(AIndex: Integer): TMetaFileHandler;
+Function TTagManager.GetMetaFileHandler(AIndex: Integer): TMetaFileHandler;
 Begin
-  Result := FFileTaggers[AIndex];
+  Result := FMetaFileHandlers[AIndex];
 End;
 
 Function TTagManager.GetTag(AName: String): Variant;
@@ -444,46 +444,61 @@ End;
 
 Procedure TTagManager.ParseFile(ACommon: TMetaFileHandler; ATags: TMetaFileHandlerList);
 Var
-  oFileTagger: TMetaFileHandler;
+  oMetaFileHandler: TMetaFileHandler;
   sExt: String;
-  sFilename: String;
+  sFilename, sTemp: String;
+  oClass: TMetaFileHandlerClass;
+  i: Integer;
 Begin
   // This routine needs to be threadsafe - use only local or passed variables
 
   sExt := ACommon.Tag['FileExt'];
   sFilename := ACommon.Tag['Original'];
 
+  // TODO, Do I need to clear all Tags first?
   ACommon.Tag['Temp'] := '';
   ACommon.Tag['Tag'] := '';
 
-  // TODO Rework this so it cycles through all classes that use this tag
-
-  //i := FFileTaggerClassByExt.FindIndexOf(AFileExt);
-  //If i >= 0 Then
-  //Begin
-  //  oClass := TMetaFileHandlerClass(FFileTaggerClassByExt.Items[i]);
-  //  Result := oClass.Create;
-  //End;
-
-  oFileTagger := Build(sExt);
-  If Assigned(oFileTagger) Then
+  // Iterate over all TMetaFileHandler's, apply each one that applies
+  For i := 0 To FMetaFileHandlerClassByExt.Count-1 Do
   Begin
-    ATags.Add(oFileTagger);
+    sTemp := FMetaFileHandlerClassByExt.NameOfIndex(i);
+    If sTemp=sExt Then
+    Begin
+      oClass := TMetaFileHandlerClass(FMetaFileHandlerClassByExt.Items[i]);
+      oMetaFileHandler := oClass.Create;
+      ATags.Add(oMetaFileHandler);
 
-    oFileTagger.Common := ACommon;
-    oFileTagger.ParseFile(sFilename);
+      oMetaFileHandler.Common := ACommon;
+      oMetaFileHandler.ParseFile(sFilename);
 
-    If oFileTagger.HasTags Then
-      If ACommon.Tag['Tag']='' Then
-        ACommon.Tag['Tag'] := oFileTagger.Name
-      Else
-        ACommon.Tag['Tag'] := ACommon.Tag['Tag'] + ', ' + oFileTagger.Name
+      If oMetaFileHandler.HasTags Then
+        If ACommon.Tag['Tag']='' Then
+          ACommon.Tag['Tag'] := oMetaFileHandler.Name
+        Else
+          ACommon.Tag['Tag'] := ACommon.Tag['Tag'] + ', ' + oMetaFileHandler.Name
+    End;
   End;
+
+  //oMetaFileHandler := Build(sExt);
+  //If Assigned(oMetaFileHandler) Then
+  //Begin
+  //  ATags.Add(oMetaFileHandler);
+  //
+  //  oMetaFileHandler.Common := ACommon;
+  //  oMetaFileHandler.ParseFile(sFilename);
+  //
+  //  If oMetaFileHandler.HasTags Then
+  //    If ACommon.Tag['Tag']='' Then
+  //      ACommon.Tag['Tag'] := oMetaFileHandler.Name
+  //    Else
+  //      ACommon.Tag['Tag'] := ACommon.Tag['Tag'] + ', ' + oMetaFileHandler.Name
+  //End;
 End;
 
 Procedure TTagManager.AppendFile(ATags: TMetaFileHandlerList);
 Var
-  oFileTagger: TMetaFileHandler;
+  oMetaFileHandler: TMetaFileHandler;
   oTag: TMetaTag;
   i: Integer;
 Begin
@@ -495,11 +510,11 @@ Begin
       Begin
         FFiles.Table.Append;
         Try
-          For oFileTagger In ATags Do
-            If oFileTagger.HasTags Then
-              For i := 0 To oFileTagger.Tags.Count - 1 Do
+          For oMetaFileHandler In ATags Do
+            If oMetaFileHandler.HasTags Then
+              For i := 0 To oMetaFileHandler.Tags.Count - 1 Do
               Begin
-                oTag := oFileTagger.Tags.Data[i];
+                oTag := oMetaFileHandler.Tags.Data[i];
                 If oTag.Value <> Null Then
                   FFiles.Table[oTag.Name] := oTag.Value;
               End;
@@ -527,7 +542,7 @@ Function TTagManager.Update(AFilename, ATag, AValue: String): Boolean;
 (*
 Var
   sPath, sExt: String;
-  oFileTagger: TMetaFileHandler;
+  oMetaFileHandler: TMetaFileHandler;
 *)
 Begin
   Result := False;
@@ -540,13 +555,13 @@ Begin
   Else
   Begin
     sExt := Lowercase(Value(FFiles.Table, 'Ext'));
-    oFileTagger := FileTaggerByExt(sExt);
+    oMetaFileHandler := MetaFileHandlerByExt(sExt);
 
-    If Assigned(oFileTagger) And (oFileTagger.Writeable) Then
+    If Assigned(oMetaFileHandler) And (oMetaFileHandler.Writeable) Then
     Begin
       Result := True;
-      oFileTagger.Filename := AFilename;
-      oFileTagger.Value[ATag] := AValue;
+      oMetaFileHandler.Filename := AFilename;
+      oMetaFileHandler.Value[ATag] := AValue;
     End;
   End;
 *)
@@ -556,7 +571,7 @@ Function TTagManager.Update(AFilename: String; ATag, AValue: Array Of String): B
 (*
 Var
   sPath, sExt: String;
-  oFileTagger: TMetaFileHandler;
+  oMetaFileHandler: TMetaFileHandler;
   i: Integer;
 *)
 Begin
@@ -567,14 +582,14 @@ Begin
   sPath := IncludeSlash(Value(FFiles.Table, 'Path'));
 
   sExt := Lowercase(Value(FFiles.Table, 'Ext'));
-  oFileTagger := FileTaggerByExt(sExt);
+  oMetaFileHandler := MetaFileHandlerByExt(sExt);
 
-  If Assigned(oFileTagger) And (oFileTagger.Writeable) Then
+  If Assigned(oMetaFileHandler) And (oMetaFileHandler.Writeable) Then
   Begin
     Result := True;
-    oFileTagger.Filename := AFilename;
+    oMetaFileHandler.Filename := AFilename;
     For i := Low(AValue) To High(AValue) Do
-      oFileTagger.Value[ATag[i]] := AValue[i];
+      oMetaFileHandler.Value[ATag[i]] := AValue[i];
   End;
 *)
 End;
