@@ -8,9 +8,7 @@ Uses
   Classes, SysUtils, Tags, DB;
 
 Type
-  TTagVideo = Class(TMetaFileHandler)
-  Private
-    FHasNFO: Boolean;
+  TTagMedia = Class(TMetaFileHandler)
   Public
     Constructor Create; Override;
     Destructor Destroy; Override;
@@ -25,9 +23,9 @@ Implementation
 Uses
   ffmpegSupport;
 
-  { TTagVideo }
+  { TTagMedia }
 
-Constructor TTagVideo.Create;
+Constructor TTagMedia.Create;
 Begin
   Inherited Create;
 
@@ -43,24 +41,19 @@ Begin
   AddTag('MM_SUB_Codec', ftString, 100, True);
   AddTag('MM_SUB_Stream', ftInteger, -1, True);
   AddTag('MM', ftString, 4096, True);
-
-  FHasNFO := False;
 End;
 
-Destructor TTagVideo.Destroy;
+Destructor TTagMedia.Destroy;
 Begin
   Inherited Destroy;
 End;
 
-Function TTagVideo.Name: String;
+Function TTagMedia.Name: String;
 Begin
-  If FHasNFO Then
-    Result := 'Video, Video NFO'
-  Else
-    Result := 'Video';
+  Result := 'ffprobe';
 End;
 
-Function TTagVideo.ParseFile(sFilename: String): Boolean;
+Function TTagMedia.ParseFile(sFilename: String): Boolean;
 Var
   oMediaInfo: TMediaInfo;
 Begin
@@ -78,15 +71,23 @@ Begin
 
         Tag['MM_File_Format'] := oMediaInfo.Format;
         Tag['MM_Streams'] := oMediaInfo.StreamCount;
-        Tag['MM_Width'] := oMediaInfo.Width;
-        Tag['MM_Height'] := oMediaInfo.Height;
-        Tag['MM_Duration'] := oMediaInfo.Duration;
 
-        If oMediaInfo.V_Stream <> -1 Then
+        If oMediaInfo.Width <> 0 Then
+          Tag['MM_Width'] := oMediaInfo.Width;
+
+        If oMediaInfo.Height <> 0 Then
+          Tag['MM_Height'] := oMediaInfo.Height;
+
+        If oMediaInfo.Format<>'image2' Then
         Begin
-          Tag['MM_VID_Codec'] := oMediaInfo.V_Codec;
-          Tag['MM_VID_Stream'] := oMediaInfo.V_Stream;
-        End;
+          Tag['MM_Duration'] := oMediaInfo.Duration;
+
+          If oMediaInfo.V_Stream <> -1 Then
+          Begin
+            Tag['MM_VID_Codec'] := oMediaInfo.V_Codec;
+            Tag['MM_VID_Stream'] := oMediaInfo.V_Stream;
+          End;
+        end;
 
         If oMediaInfo.A_Stream <> -1 Then
         Begin
@@ -109,7 +110,7 @@ End;
 Initialization
   InitializeFFmpeg;
 
-  TagManager.Register(TTagVideo, ['.pkt', '.mpg', '.mp4', '.mkv', '.avi', '.wmv',
-    '.asf', '.mov', '.flv', '.m4v', '.jpg']);
+  TagManager.Register(TTagMedia, ['.pkt', '.mpg', '.mp4', '.mkv', '.avi', '.wmv',
+    '.asf', '.mov', '.flv', '.m4v', '.jpg', '.png', '.bmp', '.mp3']);
 
 End.

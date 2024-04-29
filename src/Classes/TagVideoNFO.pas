@@ -14,6 +14,8 @@ Type
   { TTagVideoNFO }
 
   TTagVideoNFO = Class(TMetaFileHandler)
+  Private
+    FRoot: String;
   Public
     Constructor Create; Override;
     Destructor Destroy; Override;
@@ -28,7 +30,7 @@ Implementation
 Uses
   xmlread, DOM;
 
-  { TTagVideo }
+  { TTagVideoNFO }
 
 Constructor TTagVideoNFO.Create;
 Begin
@@ -60,7 +62,7 @@ End;
 
 Function TTagVideoNFO.Name: String;
 Begin
-  Result := 'Video NFO';
+  Result := 'nfo.'+FRoot;
 End;
 
 Function TTagVideoNFO.ParseFile(sFilename: String): Boolean;
@@ -68,7 +70,6 @@ Var
   oXML: TXMLDocument;
   sShow, sSeason, sEpisode, sTitle, sPlot, sAired, sAdded, sIDs, sActors, sGenre, sSets,
     sExt: String;
-  sNode: DOMString;
 
   Function Value(Anode: String): String;
   Var
@@ -162,15 +163,15 @@ Begin
     ReadXMLFile(oXML, sFilename);
     If Assigned(oXML) Then
     Try
-      sNode := oXML.DocumentElement.NodeName;
+      FRoot := oXML.DocumentElement.NodeName;
 
-      If sNode = 'episodedetails' Then
+      If FRoot = 'episodedetails' Then
         sAired := Value('aired')
-      Else If sNode = 'tvshow' Then
+      Else If FRoot = 'tvshow' Then
         sAired := Value('year') + '-01-01'
-      Else If sNode = 'movie' Then
+      Else If FRoot = 'movie' Then
         sAired := Value('premiered')
-      Else If sNode = 'musicvideo' Then
+      Else If FRoot = 'musicvideo' Then
         sAired := Value('premiered')
       Else
       Begin
@@ -193,7 +194,7 @@ Begin
       sActors := NodesToStr('actor', '', 'name');
       sSets := NodesToStr('set', '', 'name');
 
-      Tag['NFO_Tag'] := sNode;
+      Tag['NFO_Tag'] := FRoot;
 
       If sShow <> '' Then
         Tag['NFO_Show'] := sShow
