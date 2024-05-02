@@ -40,7 +40,7 @@ Begin
   AddTag('MM_AUD_Stream', ftInteger, -1, True);
   AddTag('MM_SUB_Codec', ftString, 100, True);
   AddTag('MM_SUB_Stream', ftInteger, -1, True);
-  AddTag('MM', ftString, 4096, True);
+  AddTag('MM_ID', ftString, 4096, True);
 End;
 
 Destructor TTagMedia.Destroy;
@@ -70,7 +70,7 @@ Begin
 
       If oMediaInfo.Filename = sFilename Then
       Begin
-        Tag['MM'] := oMediaInfo.RAW;
+        Tag['MM_ID'] := oMediaInfo.RAW;
 
         Tag['MM_File_Format'] := oMediaInfo.Format;
         Tag['MM_Streams'] := oMediaInfo.StreamCount;

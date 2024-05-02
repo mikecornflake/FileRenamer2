@@ -824,7 +824,8 @@ Begin
   Begin
     oColumn := fmeGrid.grdSQL.Columns[i];
     sTemp := oColumn.FieldName;
-    bVisible := (TagManager.VisibleFields.IndexOf(sTemp) <> -1);
+    bVisible := RightStr(oColumn.FieldName, 2) <> 'ID';
+    bVisible := bVisible And (TagManager.VisibleFields.IndexOf(sTemp) <> -1);
     oColumn.Visible := bVisible;
 
     oTagDef := TagManager.TagDefByName(oColumn.FieldName);
