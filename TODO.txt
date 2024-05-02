@@ -1,0 +1,62 @@
+    FImgInfo: TImgInfo;    
+
+  TExportOption = (eoShowTagName, eoShowDecimalTagID, eoShowHexTagID,
+    eoDecodeValue, eoTruncateBinary, eoBinaryAsASCII);
+  TExportOptions = set of TExportOption; 
+
+      if FImgInfo.ExifData <> nil then begin
+        FImgInfo.ExifData.ExportOptions := exportOptions;
+        FImgInfo.ExifData.ExportToStrings(Memo.Lines, SEPARATOR);
+      end;
+      if FImgInfo.IptcData <> nil then
+        FImgInfo.IptcData.ExportToStrings(Memo.Lines, exportOptions, SEPARATOR);
+
+
+
+    lTag := FImgInfo.ExifData.TagByName[CbTags.Text];
+    if lTag = nil then begin
+      MessageDlg('Tag not found.', mtError, [mbOK], 0);
+      exit;
+    end;
+    if lTag.ReadOnly then begin
+      MessageDlg('This tag is readonly.', mtError, [mbOK], 0);
+      exit;
+    end;
+  
+    if (lTag is TDateTimeTag) then begin
+      if TryStrToDateTime(EdNewTagValue.Text, dt) then begin
+        FModified := FModified or (TDateTimeTag(lTag).AsDateTime <> dt);
+        TDateTimeTag(lTag).AsDateTime := dt;
+      end else begin
+        MessageDlg('Date/time value expected for this kind of tag.', mtError, [mbOK], 0);
+        exit;
+      end;
+    end else
+    if (lTag is TShutterSpeedTag) then begin
+      FModified := true;
+      TShutterSpeedTag(lTag).AsString := EdNewTagValue.Text;
+    end else
+    if (lTag is TStringTag) then begin
+      FModified := FModified or (EdNewTagValue.Text <> TStringTAg(lTag).AsString);
+      TStringTag(lTag).AsString := EdNewTagValue.Text;
+    end else
+    if (lTag is TIntegerTag) and (lTag.Count = 1) then begin
+      if TryStrToInt(EdNewTagValue.Text, i) then begin
+        FModified := FModified or (TIntegerTag(lTag).AsInteger <> i);
+        TIntegerTag(lTag).AsInteger := i;
+      end else begin
+        MessageDlg('Integer value expected for this kind of tag.', mtError, [mbOK], 0);
+        exit;
+      end;
+    end else
+    if (lTag is TFloatTag) and (lTag.Count = 1) then begin
+      if TryStrToFloat(EdNewTagValue.Text, f) then begin
+        FModified := FModified or (TFloatTag(lTag).AsFloat <> f);
+        TFloatTag(lTag).AsFloat := f;
+      end else begin
+        MessageDlg('Floating point value expected for this kind of tag.', mtError, [mbOK], 0);
+        exit;
+      end;
+    end;             
+
+  FImgInfo.SaveToFile(fn); 
