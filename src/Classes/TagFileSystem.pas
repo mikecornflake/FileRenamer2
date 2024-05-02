@@ -51,13 +51,20 @@ Constructor TTagFileSystem.Create;
 Begin
   Inherited Create;
 
+  // Also contains FileRenamer internal fields. Logically should be separate to FileSystem
+  // But easier to bundle them here
+
   AddTag('Count', ftInteger);
   AddTag('Filename', ftString, 260);
   AddTag('FileExt', ftString, 52, True);
+
   AddTag('Tag', ftString, 52, True);
+  AddTag('Colour_ID', ftString, 52, True);
   AddTag('Temp', ftString, 4096);
-  AddTag('Date', ftDateTime);
-  AddTag('Size', ftLargeint, -1);
+
+  AddTag('Date', ftDateTime, -1, True);
+  AddTag('Size', ftLargeint, -1, True);
+  // TODO Attributes
 
   AddTag('Path', ftString, 520, True);
   AddTag('Parent', ftString, 260, True);

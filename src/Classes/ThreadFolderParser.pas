@@ -30,7 +30,7 @@ Type
     FFolderParser: TFolderParser;
     FFilename: String;
     FFileData: TFileData;
-    FFileTags: TMetaFileHandlerList;
+    FFileHandlers: TMetaFileHandlerList;
     FFileSystemTags: TMetaFileHandler;
     FProcessMeta: Boolean;
     Procedure DoAppendFile;
@@ -126,10 +126,10 @@ Procedure TFileParser.ParseFile;
 Var
   sTemp: String;
 Begin
-  FFileTags := TMetaFileHandlerList.Create(True);
+  FFileHandlers := TMetaFileHandlerList.Create(True);
   Try
     FFileSystemTags := TTagFileSystem.Create;
-    FFileTags.Add(FFileSystemTags);
+    FFileHandlers.Add(FFileSystemTags);
 
     FFileSystemTags.Tag['Filename'] := FFileData.Filename;
     FFileSystemTags.Tag['FileExt'] := FFileData.Ext;
@@ -148,12 +148,12 @@ Begin
 
     If Not Terminated Then
       If FProcessMeta Then
-        TagManager.ParseFile(FFileSystemTags, FFileTags);
+        TagManager.ParseFile(FFileSystemTags, FFileHandlers);
 
     If Not Terminated Then
       Synchronize(@DoAppendFile);
   Finally
-    FreeAndNil(FFileTags);
+    FreeAndNil(FFileHandlers);
   End;
 End;
 
@@ -164,7 +164,7 @@ End;
 
 Procedure TFileParser.DoAppendFile;
 Begin
-  TagManager.AppendFile(FFileTags);
+  TagManager.AppendFile(FFileHandlers);
 End;
 
 { TFolderParser }

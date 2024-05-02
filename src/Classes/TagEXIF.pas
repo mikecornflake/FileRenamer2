@@ -79,13 +79,13 @@ End;
 
 Function TTagEXIF.ParseFile(sFilename: String): Boolean;
 
-  Procedure SetTag(AFileTag, AExifTag: String);
+  Procedure SetTag(AMetaTag, AExifTag: String);
   Var
     oTag: fpeTags.TTag;
   Begin
     oTag := FImgInfo.ExifData.TagByName[AExifTag];
     If assigned(oTag) Then
-      Tag[AFileTag] := oTag.AsString;
+      Tag[AMetaTag] := oTag.AsString;
   End;
 
   Function TagNameValue(AIndex: Integer): String;
@@ -110,6 +110,7 @@ Begin
   If Not FileExists(sFilename) Then
     Exit;
 
+  //fpExif is not threadsafe.  Ensure we only read one EXIF file at a time
   EnterCriticalSection(LCreateEXIFLock);
   Try
     FImgInfo.LoadFromFile(sFilename);

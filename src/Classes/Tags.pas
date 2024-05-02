@@ -2,6 +2,7 @@ Unit Tags;
 
 {$mode objfpc}{$H+}
 {$WARN 5024 off : Parameter "$1" not used}
+
 Interface
 
 Uses
@@ -54,7 +55,8 @@ Type
     Function Name: String; Virtual;
 
     Function ParseFile(AFilename: String): Boolean; Virtual;
-    Function Write: Boolean; Virtual;
+    Function Update(AFilename: String; ATags, AValues: Array Of String): Boolean;
+    Function Commit: Boolean; Virtual;
 
     Function TagByName(AName: String): TMetaTag;
 
@@ -108,11 +110,10 @@ Type
     Procedure ClearFiles;
 
     Procedure Register(AMetaFileHandler: TMetaFileHandlerClass; AFileExt: Array Of String);
-    Function Build(AFileExt: String): TMetaFileHandler;
 
     // TODO - Implement
     Function Update(AFilename, ATag, AValue: String): Boolean; Overload;
-    Function Update(AFilename: String; ATag, AValue: Array Of String): Boolean; Overload;
+    Function Update(AFilename: String; ATags, AValues: Array Of String): Boolean; Overload;
 
     Property Dataset: TBufDataset read GetDataset;
     Property MetaFileHandlers: TMetaFileHandlerList read FMetaFileHandlers;
@@ -183,7 +184,39 @@ Begin
   ClearTags;
 End;
 
-Function TMetaFileHandler.Write: Boolean;
+Function TMetaFileHandler.Update(AFilename: String; ATags, AValues: Array Of String): Boolean;
+Var
+  i: Integer;
+  oTag: TMetaTag;
+  sTag, sValue: String;
+Begin
+  Result := False;
+
+  If Not Writeable Then
+    Exit;
+
+  For i := Low(ATags) To High(ATags) Do
+  Begin
+    sTag := ATags[i];
+    sValue := AValues[i];
+
+    oTag := TagByName(sTag);
+    If Assigned(oTag) Then
+    Begin
+      oTag.Value := sValue;
+      Result := True;
+    End;
+  End;
+
+  If Result Then
+  Begin
+    FFilename := AFilename;
+
+    Result := Commit;
+  End;
+End;
+
+Function TMetaFileHandler.Commit: Boolean;
 Begin
   Result := False;
 End;
@@ -249,10 +282,10 @@ End;
 Procedure TMetaFileHandler.AddTag(AName: String; AFieldType: TFieldType;
   ASize: Integer; AReadOnly: Boolean);
 Var
-  oFileTagDef: TMetaTag;
+  oMetaTag: TMetaTag;
 Begin
-  oFileTagDef := TMetaTag.Create(AName, AFieldType, ASize, AReadOnly);
-  FTags.Add(AName, oFileTagDef);
+  oMetaTag := TMetaTag.Create(AName, AFieldType, ASize, AReadOnly);
+  FTags.Add(AName, oMetaTag);
 End;
 
 { TTagManager }
@@ -338,21 +371,6 @@ Begin
   oMetaFileHandler.Filter := sFilter;
 End;
 
-Function TTagManager.Build(AFileExt: String): TMetaFileHandler;
-Var
-  i: Integer;
-  oClass: TMetaFileHandlerClass;
-Begin
-  Result := nil;
-
-  i := FMetaFileHandlerClassByExt.FindIndexOf(AFileExt);
-  If i >= 0 Then
-  Begin
-    oClass := TMetaFileHandlerClass(FMetaFileHandlerClassByExt.Items[i]);
-    Result := oClass.Create;
-  End;
-End;
-
 Procedure TTagManager.DefineTags;
 Var
   i: Integer;
@@ -382,11 +400,13 @@ Begin
 
   FFiles.Open;
 
-  FFiles.FieldByName['Filename'].OnSetText := @DoSetText;
-
   For oField In FFiles.Table.Fields Do
+  Begin
+    oField.OnSetText := @DoSetText;
+
     If oField.DataType = ftMemo Then
       oField.OnGetText := @DoGetMemo;
+  End;
 End;
 
 Function TTagManager.TagDefByName(AName: String): TMetaTag;
@@ -414,22 +434,22 @@ End;
 
 Function TTagManager.GetTag(AName: String): Variant;
 Var
-  oFileTagDef: TMetaTag;
+  oMetaTag: TMetaTag;
 Begin
-  oFileTagDef := TagDefByName(AName);
-  If Assigned(oFileTagDef) Then
-    Result := oFileTagDef.Value
+  oMetaTag := TagDefByName(AName);
+  If Assigned(oMetaTag) Then
+    Result := oMetaTag.Value
   Else
     Result := Null;
 End;
 
 Procedure TTagManager.SetTag(AName: String; AValue: Variant);
 Var
-  oFileTagDef: TMetaTag;
+  oMetaTag: TMetaTag;
 Begin
-  oFileTagDef := TagDefByName(AName);
-  If Assigned(oFileTagDef) Then
-    oFileTagDef.Value := AValue;
+  oMetaTag := TagDefByName(AName);
+  If Assigned(oMetaTag) Then
+    oMetaTag.Value := AValue;
 End;
 
 Procedure TTagManager.DoGetMemo(Sender: TField; Var aText: String; DisplayText: Boolean);
@@ -438,9 +458,30 @@ Begin
 End;
 
 Procedure TTagManager.DoSetText(Sender: TField; Const aText: String);
+Var
+  sField, sOriginal: String;
 Begin
   If Assigned(Sender) And FFiles.Table.Active Then
-    FFiles.Table.FieldByName('Temp').AsString := Sender.Fieldname + '=' + aText;
+  Begin
+    sField := Sender.FieldName;
+    sOriginal := FFiles.Table['Original'];
+
+    If (sField <> 'Count') And (sField <> 'Temp') Then
+    Begin
+      // TODO EditMode=Bulk v Immediate code to go here
+      // TODO Need to confirm if this Field is valid to be edited for this FileExt
+      // TODO Design decision - do we want to block edit if no tag
+      //      Or automatically try to add a Tag?
+      // Current thinking - try to add tag
+      Sender.Value := aText;
+
+      If Not Update(sOriginal, sField, aText) Then
+      Begin
+        // Mark the change for future Bulk Update
+        FFiles.Table.FieldByName('Colour_ID').AsString := 'Orange';
+      End;
+    End;
+  End;
 End;
 
 Procedure TTagManager.ParseFile(ACommon: TMetaFileHandler; ATags: TMetaFileHandlerList);
@@ -456,7 +497,7 @@ Begin
   sExt := ACommon.Tag['FileExt'];
   sFilename := ACommon.Tag['Original'];
 
-  // TODO, Do I need to clear all Tags first?
+  // TODO, I want to implement refreh: Do I need to clear all Tags first?
   ACommon.Tag['Temp'] := '';
   ACommon.Tag['Tag'] := '';
 
@@ -525,59 +566,40 @@ Begin
 End;
 
 Function TTagManager.Update(AFilename, ATag, AValue: String): Boolean;
-(*
-Var
-  sPath, sExt: String;
-  oMetaFileHandler: TMetaFileHandler;
-*)
 Begin
-  Result := False;
-(*
-  sPath := IncludeSlash(Value(FFiles.Table, 'Path'));
-  ATag := TrimChars(ATag, [' ', '%']);
-
-  If AnsiCompareText(ATag, 'Filename') = 0 Then
-    Result := FileSupport.FileRename(sPath + AFilename, sPath + AValue)
-  Else
-  Begin
-    sExt := Lowercase(Value(FFiles.Table, 'Ext'));
-    oMetaFileHandler := MetaFileHandlerByExt(sExt);
-
-    If Assigned(oMetaFileHandler) And (oMetaFileHandler.Writeable) Then
-    Begin
-      Result := True;
-      oMetaFileHandler.Filename := AFilename;
-      oMetaFileHandler.Value[ATag] := AValue;
-    End;
-  End;
-*)
+  Result := Update(AFilename, [ATag], [AValue]);
 End;
 
-Function TTagManager.Update(AFilename: String; ATag, AValue: Array Of String): Boolean;
-(*
+Function TTagManager.Update(AFilename: String; ATags, AValues: Array Of String): Boolean;
 Var
-  sPath, sExt: String;
+  sExt, sTemp: String;
   oMetaFileHandler: TMetaFileHandler;
-  i: Integer;
-*)
+  iHandler: Integer;
+  oClass: TMetaFileHandlerClass;
 Begin
   // TODO COMPLETE THE WRITING OF TAGS
   Result := False;
 
-(*
-  sPath := IncludeSlash(Value(FFiles.Table, 'Path'));
+  sExt := Lowercase(FFiles.Table['FileExt']);
 
-  sExt := Lowercase(Value(FFiles.Table, 'Ext'));
-  oMetaFileHandler := MetaFileHandlerByExt(sExt);
-
-  If Assigned(oMetaFileHandler) And (oMetaFileHandler.Writeable) Then
+  // Iterate over all TMetaFileHandler's, apply each one that applies
+  For iHandler := 0 To FMetaFileHandlerClassByExt.Count - 1 Do
   Begin
-    Result := True;
-    oMetaFileHandler.Filename := AFilename;
-    For i := Low(AValue) To High(AValue) Do
-      oMetaFileHandler.Value[ATag[i]] := AValue[i];
+    sTemp := FMetaFileHandlerClassByExt.NameOfIndex(iHandler);
+    If sTemp = sExt Then
+    Begin
+      oClass := TMetaFileHandlerClass(FMetaFileHandlerClassByExt.Items[iHandler]);
+      oMetaFileHandler := oClass.Create;
+      Try
+        If Assigned(oMetaFileHandler) And (oMetaFileHandler.Writeable) Then
+        Begin
+          Result := Result Or oMetaFileHandler.Update(AFilename, ATags, AValues);
+        End;
+      Finally
+        oMetaFileHandler.Free;
+      End;
+    End;
   End;
-*)
 End;
 
 Initialization
