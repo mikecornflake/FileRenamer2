@@ -815,6 +815,19 @@ Var
   bVisible: Boolean;
   sTemp: String;
 Begin
+  {
+     A note on the visibility of columns
+     All the column visibility in fmeGrid.InitialiseDBGrid(False); is
+     completely overridden by the later code.
+
+     TagManager has a list of "Visible Columns".  If a column isn't in this
+     list, it's hidden. (TagManager.VisibleFields.IndexOf(sTemp) <> -1)
+
+     I missed this, which is why I put in the 'ID" code.
+  }
+  // TODO I should remove 'ID' special case code, then find a way of removing
+  //  the columns I want to remain hidden from the TagManager.VisibleField
+
   For i := 0 To fmeGrid.grdSQL.Columns.Count - 1 Do
     fmeGrid.grdSQL.Columns[i].Visible := True;
 

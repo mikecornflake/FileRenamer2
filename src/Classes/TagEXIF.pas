@@ -34,7 +34,7 @@ Var
 
 Constructor TTagEXIF.Create;
 Var
-  sTag, sMetaTag, sExifTag: String;
+  sMetaTag: String;
   i: Integer;
 Begin
   Inherited Create;
@@ -63,7 +63,6 @@ Begin
   For i := 0 To FFields.Count - 1 Do
   Begin
     sMetaTag := FFields.Names[i];
-    sExifTag := FFields.ValueFromIndex[i];
 
     If FTags.IndexOf(sMetaTag) = -1 Then
       AddTag(sMetaTag, ftString, 100);
@@ -117,7 +116,7 @@ Function TTagEXIF.ParseFile(sFilename: String): Boolean;
   End;
 
 Var
-  sTag, sField, sTemp, sMetaTag, sExifTag: String;
+  sMetaTag, sExifTag: String;
   i: Integer;
   oTemp: TStringList;
 Begin
