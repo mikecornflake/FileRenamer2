@@ -164,7 +164,12 @@ Begin
 
   If FileExists(sFilename) Then
   Begin
-    ReadXMLFile(oXML, sFilename);
+    Try
+      ReadXMLFile(oXML, sFilename);
+    Except
+      Result := False;
+    End;
+
     If Assigned(oXML) Then
     Try
       FRoot := oXML.DocumentElement.NodeName;
