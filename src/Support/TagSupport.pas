@@ -44,4 +44,3 @@ Finalization
   FreeAndNil(lTagSupport);
 
 End.
-

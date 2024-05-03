@@ -41,10 +41,8 @@ Var
   iNumLen: Integer;
   iPos: Integer;
   iLen: Integer;
-
 Const
   setEndChars = [' ', '(', ')', '_', '-'];
-
 Begin
   Result := sInput;
 

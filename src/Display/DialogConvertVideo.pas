@@ -43,7 +43,7 @@ Uses Tags, BufDataset, DBSUpport, ffmpegSupport, FormFileRenamer2, OSSupport,
 
   {$R *.lfm}
 
-{ TdlgConvertVideo }
+  { TdlgConvertVideo }
 
 Procedure TdlgConvertVideo.FormCreate(Sender: TObject);
 Begin
