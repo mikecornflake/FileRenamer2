@@ -69,8 +69,8 @@ Begin
   End;
 
   // Finally the summary fields
-  AddTag('EXIF_ID', ftString, 4096, True);
-  AddTag('EXIF_IPTC_ID', ftString, 4096, True);
+  AddTag('EXIF', ftString, 4096, True, True);
+  AddTag('EXIF_IPTC', ftString, 4096, True, True);
 End;
 
 Destructor TTagEXIF.Destroy;
@@ -146,7 +146,7 @@ Begin
           [eoShowTagName, eoDecodeValue, eoTruncateBinary, eoBinaryAsASCII];
         FImgInfo.ExifData.ExportToStrings(oTemp, '=');
 
-        Tag['EXIF_ID'] := oTemp.Text;
+        Tag['EXIF'] := oTemp.Text;
       Finally
         oTemp.Free;
       End;
@@ -161,7 +161,7 @@ Begin
         FImgInfo.IptcData.ExportToStrings(oTemp, [eoShowTagName, eoDecodeValue,
           eoTruncateBinary, eoBinaryAsASCII], '=');
 
-        Tag['EXIF_IPTC_ID'] := oTemp.Text;
+        Tag['EXIF_IPTC'] := oTemp.Text;
       Finally
         oTemp.Free;
       End;

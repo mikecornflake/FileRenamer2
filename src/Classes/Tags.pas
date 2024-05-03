@@ -22,9 +22,10 @@ Type
     Size: Integer;
     ReadOnly: Boolean;
     Value: Variant;
+    Hidden: Boolean;
 
     Constructor Create(AName: String; AFieldType: TFieldType; ASize: Integer = -1;
-      AReadOnly: Boolean = False);
+      AReadOnly: Boolean = False; AHidden: Boolean = False);
   End;
 
   TMetaTagList = Specialize TFPGMapObject<String, TMetaTag>;
@@ -48,7 +49,7 @@ Type
     Destructor Destroy; Override;
 
     Procedure AddTag(AName: String; AFieldType: TFieldType; ASize: Integer = -1;
-      AReadOnly: Boolean = False);
+      AReadOnly: Boolean = False; AHidden: Boolean = False);
 
     Function Writeable: Boolean; Virtual;
 
@@ -143,13 +144,14 @@ End;
 { TMetaTag }
 
 Constructor TMetaTag.Create(AName: String; AFieldType: TFieldType; ASize: Integer;
-  AReadOnly: Boolean);
+  AReadOnly: Boolean; AHidden: Boolean = False);
 Begin
   Name := AName;
   FieldType := AFieldType;
   Size := ASize;
   ReadOnly := AReadOnly;
   Value := Null;
+  Hidden := AHidden;
 End;
 
 { TMetaFileHandler }
@@ -259,11 +261,15 @@ Begin
     If AValue <> Null Then
     Begin
       FHasTags := True;
-      EnterCriticalsection(lVisibleFieldLock);
-      Try
-        TagManager.VisibleFields.Add(AName);
-      Finally
-        LeaveCriticalsection(lVisibleFieldLock);
+
+      If Not oTag.Hidden Then
+      Begin
+        EnterCriticalsection(lVisibleFieldLock);
+        Try
+          TagManager.VisibleFields.Add(AName);
+        Finally
+          LeaveCriticalsection(lVisibleFieldLock);
+        End;
       End;
     End;
   End;
@@ -280,11 +286,11 @@ Begin
 End;
 
 Procedure TMetaFileHandler.AddTag(AName: String; AFieldType: TFieldType;
-  ASize: Integer; AReadOnly: Boolean);
+  ASize: Integer; AReadOnly: Boolean; AHidden: Boolean);
 Var
   oMetaTag: TMetaTag;
 Begin
-  oMetaTag := TMetaTag.Create(AName, AFieldType, ASize, AReadOnly);
+  oMetaTag := TMetaTag.Create(AName, AFieldType, ASize, AReadOnly, AHidden);
   FTags.Add(AName, oMetaTag);
 End;
 
@@ -478,7 +484,7 @@ Begin
       If Not Update(sOriginal, sField, aText) Then
       Begin
         // Mark the change for future Bulk Update
-        FFiles.Table.FieldByName('Colour_ID').AsString := 'Orange';
+        FFiles.Table.FieldByName('Colour').AsString := 'Orange';
       End;
     End;
   End;
