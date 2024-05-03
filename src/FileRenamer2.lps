@@ -42,9 +42,10 @@
       <Unit3>
         <Filename Value="Classes\Tags.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="211"/>
-        <CursorPos X="33" Y="217"/>
+        <TopLine Value="464"/>
+        <CursorPos X="28" Y="476"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit3>
@@ -89,10 +90,9 @@
       <Unit8>
         <Filename Value="Classes\ThreadFolderParser.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="147"/>
-        <CursorPos X="22" Y="150"/>
+        <TopLine Value="17"/>
+        <CursorPos X="23" Y="152"/>
         <UsageCount Value="197"/>
         <Bookmarks Count="1">
           <Item0 Y="363" ID="3"/>
@@ -1737,7 +1737,7 @@
         <UsageCount Value="10"/>
       </Unit233>
     </Units>
-    <JumpHistory Count="23" HistoryIndex="22">
+    <JumpHistory Count="25" HistoryIndex="24">
       <Position1>
         <Filename Value="Classes\TagEXIF.pas"/>
         <Caret Line="37" Column="11" TopLine="30"/>
@@ -1829,6 +1829,13 @@
         <Filename Value="Classes\TagVideoNFO.pas"/>
         <Caret Line="168" Column="11" TopLine="157"/>
       </Position23>
+      <Position24>
+        <Filename Value="Classes\Tags.pas"/>
+        <Caret Line="218" Column="26" TopLine="211"/>
+      </Position24>
+      <Position25>
+        <Filename Value="Classes\Tags.pas"/>
+      </Position25>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>

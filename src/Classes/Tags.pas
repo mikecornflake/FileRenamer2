@@ -484,7 +484,7 @@ Begin
       If Not Update(sOriginal, sField, aText) Then
       Begin
         // Mark the change for future Bulk Update
-        FFiles.Table.FieldByName('Colour').AsString := 'Orange';
+        FFiles.Table.FieldByName('Colour_ID').AsString := 'Orange';
       End;
     End;
   End;
