@@ -36,6 +36,8 @@ Begin
   AddTag('MM_Streams', ftInteger, -1, True);
   AddTag('MM_VID_Codec', ftString, 100, True);
   AddTag('MM_VID_Stream', ftInteger, -1, True);
+  AddTag('MM_VID_Profile', ftString, 100, True);
+  AddTag('MM_VID_pixfmt', ftString, 100, True);
   AddTag('MM_AUD_Codec', ftString, 100, True);
   AddTag('MM_AUD_Stream', ftInteger, -1, True);
   AddTag('MM_SUB_Codec', ftString, 100, True);
@@ -89,6 +91,10 @@ Begin
           Begin
             Tag['MM_VID_Codec'] := oMediaInfo.V_Codec;
             Tag['MM_VID_Stream'] := oMediaInfo.V_Stream;
+
+            Tag['MM_VID_Profile'] := oMediaInfo.V_Profile;
+            Tag['MM_VID_pixfmt'] := oMediaInfo.V_pixfmt;
+
           End;
         End;
 

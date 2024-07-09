@@ -26,7 +26,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="2"/>
-      <BuildNr Value="199"/>
+      <BuildNr Value="200"/>
       <Language Value="0809"/>
       <Attributes pvaDebug="True"/>
       <StringTable CompanyName="Inspector Mike Pty Ltd" FileDescription="File Renamer and Metadata processor" LegalCopyright="(c) 2022" ProductName="FileRenamer2"/>
@@ -176,7 +176,7 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <Exceptions Count="4">
+    <Exceptions Count="5">
       <Item1>
         <Name Value="EAbort"/>
       </Item1>
@@ -189,6 +189,9 @@
       <Item4>
         <Name Value="EFpExif"/>
       </Item4>
+      <Item5>
+        <Name Value="EXMLReadError"/>
+      </Item5>
     </Exceptions>
   </Debugging>
 </CONFIG>

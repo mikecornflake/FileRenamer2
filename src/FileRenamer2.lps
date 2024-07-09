@@ -42,19 +42,18 @@
       <Unit3>
         <Filename Value="Classes\Tags.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <TopLine Value="464"/>
-        <CursorPos X="28" Y="476"/>
+        <CursorPos X="33" Y="470"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
         <Filename Value="Classes\TagMultimedia.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="19"/>
-        <CursorPos X="34" Y="71"/>
+        <CursorPos X="22" Y="41"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit4>
@@ -69,7 +68,7 @@
       <Unit6>
         <Filename Value="Classes\TagEXIF.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="55"/>
         <CursorPos X="49" Y="73"/>
         <UsageCount Value="200"/>
@@ -81,7 +80,7 @@
         <ComponentName Value="dlgScanFolder"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="8"/>
         <TopLine Value="41"/>
         <CursorPos X="84" Y="66"/>
         <UsageCount Value="200"/>
@@ -90,10 +89,10 @@
       <Unit8>
         <Filename Value="Classes\ThreadFolderParser.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="17"/>
         <CursorPos X="23" Y="152"/>
-        <UsageCount Value="197"/>
+        <UsageCount Value="200"/>
         <Bookmarks Count="1">
           <Item0 Y="363" ID="3"/>
         </Bookmarks>
@@ -105,7 +104,7 @@
         <EditorIndex Value="2"/>
         <TopLine Value="52"/>
         <CursorPos X="21" Y="67"/>
-        <UsageCount Value="190"/>
+        <UsageCount Value="193"/>
         <Loaded Value="True"/>
       </Unit9>
       <Unit10>
@@ -117,7 +116,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="305"/>
         <CursorPos X="15" Y="293"/>
-        <UsageCount Value="90"/>
+        <UsageCount Value="93"/>
       </Unit10>
       <Unit11>
         <Filename Value="Display\DialogRenameOptions.pas"/>
@@ -127,15 +126,15 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="14" Y="5"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="61"/>
       </Unit11>
       <Unit12>
         <Filename Value="Classes\TagVideoNFO.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="160"/>
         <CursorPos X="5" Y="179"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="49"/>
         <Loaded Value="True"/>
       </Unit12>
       <Unit13>
@@ -1649,10 +1648,11 @@
       </Unit221>
       <Unit222>
         <Filename Value="..\..\InspectorMike-common\Support\ffmpegSupport.pas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="104"/>
-        <CursorPos X="34" Y="118"/>
-        <UsageCount Value="11"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="255"/>
+        <CursorPos X="28" Y="265"/>
+        <UsageCount Value="13"/>
+        <Loaded Value="True"/>
       </Unit222>
       <Unit223>
         <Filename Value="..\..\InspectorMike-common\Support\StringSupport.pas"/>
@@ -1737,7 +1737,7 @@
         <UsageCount Value="10"/>
       </Unit233>
     </Units>
-    <JumpHistory Count="25" HistoryIndex="24">
+    <JumpHistory Count="28" HistoryIndex="27">
       <Position1>
         <Filename Value="Classes\TagEXIF.pas"/>
         <Caret Line="37" Column="11" TopLine="30"/>
@@ -1836,6 +1836,18 @@
       <Position25>
         <Filename Value="Classes\Tags.pas"/>
       </Position25>
+      <Position26>
+        <Filename Value="Classes\TagMultimedia.pas"/>
+        <Caret Line="96" Column="56" TopLine="71"/>
+      </Position26>
+      <Position27>
+        <Filename Value="Classes\TagMultimedia.pas"/>
+        <Caret Line="60" Column="3" TopLine="46"/>
+      </Position27>
+      <Position28>
+        <Filename Value="Classes\TagMultimedia.pas"/>
+        <Caret Line="54" Column="26" TopLine="46"/>
+      </Position28>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
