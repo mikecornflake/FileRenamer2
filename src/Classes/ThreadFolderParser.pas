@@ -84,6 +84,9 @@ Type
     Property Files: TFilesList read FFiles;
   End;
 
+Const
+  GThreadCount: Integer = 48;
+
 Implementation
 
 Uses
@@ -209,6 +212,8 @@ Var
   sExt: String;
   i: Integer;
   oThread: TFileParser;
+  iThreadCount: Integer;
+  iCPUCount: Integer;
 Begin
   FExtStats.Clear;
   FFiles.Clear;
@@ -238,9 +243,22 @@ Begin
   Begin
     FFileThreadsRunning := 0;
 
+    iCPUCount := GetCPUCount;
+    iThreadCount := GThreadCount;
+
+    If GThreadCount > iCPUCount Then
+    Begin
+      If iCPUCount >= 3 Then
+        iThreadCount := Trunc(0.75* iCPUCount)
+      Else
+        iThreadCount := 1;
+    End;
+
+    FStatus := Format('%d threads will be created', [iThreadCount]);
+
     InitCriticalSection(FAccessCriticalSection);
     Try
-      For i := 0 To 3 Do
+      For i := 0 To iThreadCount - 1 Do
         If FFiles.Count > 0 Then
         Begin
           oThread := TFileParser.Create(True, Self);
